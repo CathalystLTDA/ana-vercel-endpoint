@@ -1,0 +1,344 @@
+{
+  "options": {
+    "method": "get",
+    "path": "/threads/thread_Pp3JKNnSup8D9ZLlsyevant5/messages",
+    "query": {},
+    "headers": {
+      "OpenAI-Beta": "assistants=v1"
+    }
+  },
+  "response": {
+    "size": 0,
+    "timeout": 0
+  },
+  "body": {
+    "object": "list",
+    "data": [
+      {
+        "id": "msg_McdtjMikxe9ia82ZeYbrnEPE",
+        "object": "thread.message",
+        "created_at": 1699664434,
+        "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Certo, se precisar de algo mais ou tiver outras questões de saúde no futuro, não hesite em retornar. Desejo-lhe uma rápida melhora e fique bem. Adeus!",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_53box1YH89g0H0qL8QiFhyHp",
+        "metadata": {}
+      },
+      {
+        "id": "msg_PhHlUrk7adMLX9QYaqRjbJVt",
+        "object": "thread.message",
+        "created_at": 1699664433,
+        "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "finish",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      },
+      {
+        "id": "msg_1b1faqiyP7b62jfHIpOxrAPW",
+        "object": "thread.message",
+        "created_at": 1699664416,
+        "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Se você precisar de mais assistência ou tiver outras questões sobre saúde, estou aqui para ajudar. Cuide-se e fique atento a como a dor de cabeça progride. Se necessário, procure atendimento médico. Até mais!",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_pHy5Vx9IuXBPzl2Oc3owfwJ7",
+        "metadata": {}
+      },
+      {
+        "id": "msg_Dqawm7FjIcu5TnFBysCqFn37",
+        "object": "thread.message",
+        "created_at": 1699664415,
+        "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Finish",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      },
+      {
+        "id": "msg_hrk81UyhoAA40FXnUmSY8CPF",
+        "object": "thread.message",
+        "created_at": 1699664390,
+        "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Entendi, a dor de cabeça começou recentemente. Dado o curto período de tempo, é menos provável que seja algo grave. No entanto, é sempre importante observar como a dor progride. Aqui estão algumas medidas iniciais que podem ajudar a aliviar a dor de cabeça:\n\n1. Descansar em um ambiente calmo e escuro.\n2. Manter-se hidratado, bebendo água ou líquidos sem cafeína.\n3. Aplicar compressas frias ou mornas na testa ou na nuca.\n4. Evitar o consumo de álcool e outras substâncias que possam piorar a dor de cabeça.\n5. Fazer uma refeição leve se você não tiver comido há muito tempo.\n\nSe a dor de cabeça for leve e não estiver acompanhada de outros sintomas preocupantes, essas medidas podem ser suficientes. Porém, se a dor de cabeça se intensificar ou se você começar a apresentar outros sintomas, como alterações na visão, rigidez no pescoço, confusão, perda de força ou sensibilidade, é importante buscar atendimento médico imediatamente. Esses podem ser sinais de condições mais graves que requerem atenção médica urgente.\n\nSe a dor persistir e for incomum para você, ou se tiver algum motivo de preocupação, pode ser aconselhável consultar um profissional de saúde para uma avaliação mais detalhada. Me avise se precisar de informações sobre como acessar serviços de saúde ou se tiver outras dúvidas relacionadas à sua condição.",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_7KPTy8uSA0FQijrixew5yCUD",
+        "metadata": {}
+      },
+      {
+        "id": "msg_moDTaMRVXcvI6i4VC73CDnO4",
+        "object": "thread.message",
+        "created_at": 1699664389,
+        "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Estou a uns 5 minutos",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      },
+      {
+        "id": "msg_IccEM5Qp86rm9QxfyqSYTYlE",
+        "object": "thread.message",
+        "created_at": 1699664372,
+        "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Entendo que você está com dor de cabeça. Para que eu possa ajudar da melhor maneira possível, preciso de mais algumas informações. Você poderia me dizer há quanto tempo está com essa dor de cabeça? É uma dor intensa ou leve? A dor é constante ou vem em ondas? Além da dor de cabeça, você apresenta outros sintomas, como febre, náuseas ou sensibilidade à luz? Você tem algum histórico de enxaqueca ou outras condições de saúde que possam estar relacionadas? Essas informações ajudarão a determinar a gravidade da situação e o que é recomendável fazer em seguida.",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_KeTae3oYGMu90llYpbBiKeGb",
+        "metadata": {}
+      },
+      {
+        "id": "msg_gUkult9nNNTu3ZAYZKQaap9Z",
+        "object": "thread.message",
+        "created_at": 1699664370,
+        "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Maria estou com dor de cabeça",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      }
+    ],
+    "first_id": "msg_McdtjMikxe9ia82ZeYbrnEPE",
+    "last_id": "msg_gUkult9nNNTu3ZAYZKQaap9Z",
+    "has_more": false
+  },
+  "data": [
+    {
+      "id": "msg_McdtjMikxe9ia82ZeYbrnEPE",
+      "object": "thread.message",
+      "created_at": 1699664434,
+      "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Certo, se precisar de algo mais ou tiver outras questões de saúde no futuro, não hesite em retornar. Desejo-lhe uma rápida melhora e fique bem. Adeus!",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_53box1YH89g0H0qL8QiFhyHp",
+      "metadata": {}
+    },
+    {
+      "id": "msg_PhHlUrk7adMLX9QYaqRjbJVt",
+      "object": "thread.message",
+      "created_at": 1699664433,
+      "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "finish",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    },
+    {
+      "id": "msg_1b1faqiyP7b62jfHIpOxrAPW",
+      "object": "thread.message",
+      "created_at": 1699664416,
+      "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Se você precisar de mais assistência ou tiver outras questões sobre saúde, estou aqui para ajudar. Cuide-se e fique atento a como a dor de cabeça progride. Se necessário, procure atendimento médico. Até mais!",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_pHy5Vx9IuXBPzl2Oc3owfwJ7",
+      "metadata": {}
+    },
+    {
+      "id": "msg_Dqawm7FjIcu5TnFBysCqFn37",
+      "object": "thread.message",
+      "created_at": 1699664415,
+      "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Finish",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    },
+    {
+      "id": "msg_hrk81UyhoAA40FXnUmSY8CPF",
+      "object": "thread.message",
+      "created_at": 1699664390,
+      "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Entendi, a dor de cabeça começou recentemente. Dado o curto período de tempo, é menos provável que seja algo grave. No entanto, é sempre importante observar como a dor progride. Aqui estão algumas medidas iniciais que podem ajudar a aliviar a dor de cabeça:\n\n1. Descansar em um ambiente calmo e escuro.\n2. Manter-se hidratado, bebendo água ou líquidos sem cafeína.\n3. Aplicar compressas frias ou mornas na testa ou na nuca.\n4. Evitar o consumo de álcool e outras substâncias que possam piorar a dor de cabeça.\n5. Fazer uma refeição leve se você não tiver comido há muito tempo.\n\nSe a dor de cabeça for leve e não estiver acompanhada de outros sintomas preocupantes, essas medidas podem ser suficientes. Porém, se a dor de cabeça se intensificar ou se você começar a apresentar outros sintomas, como alterações na visão, rigidez no pescoço, confusão, perda de força ou sensibilidade, é importante buscar atendimento médico imediatamente. Esses podem ser sinais de condições mais graves que requerem atenção médica urgente.\n\nSe a dor persistir e for incomum para você, ou se tiver algum motivo de preocupação, pode ser aconselhável consultar um profissional de saúde para uma avaliação mais detalhada. Me avise se precisar de informações sobre como acessar serviços de saúde ou se tiver outras dúvidas relacionadas à sua condição.",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_7KPTy8uSA0FQijrixew5yCUD",
+      "metadata": {}
+    },
+    {
+      "id": "msg_moDTaMRVXcvI6i4VC73CDnO4",
+      "object": "thread.message",
+      "created_at": 1699664389,
+      "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Estou a uns 5 minutos",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    },
+    {
+      "id": "msg_IccEM5Qp86rm9QxfyqSYTYlE",
+      "object": "thread.message",
+      "created_at": 1699664372,
+      "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Entendo que você está com dor de cabeça. Para que eu possa ajudar da melhor maneira possível, preciso de mais algumas informações. Você poderia me dizer há quanto tempo está com essa dor de cabeça? É uma dor intensa ou leve? A dor é constante ou vem em ondas? Além da dor de cabeça, você apresenta outros sintomas, como febre, náuseas ou sensibilidade à luz? Você tem algum histórico de enxaqueca ou outras condições de saúde que possam estar relacionadas? Essas informações ajudarão a determinar a gravidade da situação e o que é recomendável fazer em seguida.",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_KeTae3oYGMu90llYpbBiKeGb",
+      "metadata": {}
+    },
+    {
+      "id": "msg_gUkult9nNNTu3ZAYZKQaap9Z",
+      "object": "thread.message",
+      "created_at": 1699664370,
+      "thread_id": "thread_Pp3JKNnSup8D9ZLlsyevant5",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Maria estou com dor de cabeça",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    }
+  ]
+}
