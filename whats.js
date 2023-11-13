@@ -253,8 +253,7 @@ client.on('message', async msg => {
         return;
     }
 
-    if (pushname === 'Khiara' || pushname === "Pedro Pureza" ) {
-        
+    if (pushname === 'Khiara') {
         await handleOpenAIInteraction(msg);
        
         try {
@@ -270,6 +269,24 @@ client.on('message', async msg => {
     if (msg.type === 'sticker') {
         console.log('Received a sticker from', msg.from);
         client.sendMessage(msg.from, "Desculpa, mas não sou capaz de responder adesivos!");
+        return;
+    }
+
+    if (msg.type === 'image') {
+        console.log('Received an image from', msg.from);
+        client.sendMessage(msg.from, "Desculpa, mas ainda não estou preparada para analisar suas fotos, sinto muito por isso, em breve serei capaz de te ajudar com imagens. Pode me descrever o conteúdo dela?");
+        return;
+    }
+
+    if (msg.type === 'document') {
+        console.log('Received a document from', msg.from);
+        client.sendMessage(msg.from, "Desculpa, mas ainda não sou capaz de ler documentos, em breve estarei pronta para analisá-los! Pode me descrever o que tem nesse documento?");
+        return;
+    }
+
+    if (msg.type === 'location') {
+        console.log('Received a location from', msg.from);
+        client.sendMessage(msg.from, "Entendo que você me mandou uma localização, e em breve vou poder interagir com esse tipo de mensagem. Pode me mandar o endereço por texto?");
         return;
     }
 
