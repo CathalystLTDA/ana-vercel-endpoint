@@ -1,0 +1,344 @@
+{
+  "options": {
+    "method": "get",
+    "path": "/threads/thread_6ouGW1mPc6XQOouXvWA7twNm/messages",
+    "query": {},
+    "headers": {
+      "OpenAI-Beta": "assistants=v1"
+    }
+  },
+  "response": {
+    "size": 0,
+    "timeout": 0
+  },
+  "body": {
+    "object": "list",
+    "data": [
+      {
+        "id": "msg_GovizwGetdmN0vwJ0biuGgIo",
+        "object": "thread.message",
+        "created_at": 1699667628,
+        "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Eu estou aqui para ajudar com questões de saúde. Se você precisa de assistência ou tem alguma dúvida relacionada à saúde, por favor, me informe para que eu possa fornecer a ajuda necessária. Como posso ajudar você hoje com sua saúde?",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_BfXNnbPW0P2DtgzUy5m8P3LG",
+        "metadata": {}
+      },
+      {
+        "id": "msg_DhDLJrSqk5A3TVsU7D7khAaA",
+        "object": "thread.message",
+        "created_at": 1699667627,
+        "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "finish",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      },
+      {
+        "id": "msg_IxfWCqKPugPzqybSsc1UNWzI",
+        "object": "thread.message",
+        "created_at": 1699667618,
+        "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Estou aqui para ajudar com qualquer questão relacionada à saúde. Se você tiver alguma dúvida ou preocupação, por favor, compartilhe comigo para que eu possa oferecer a assistência adequada. Como posso auxiliá-lo(a) hoje em relação à sua saúde ou a serviços do SUS?",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_K5Dc9E1HM4fDuJe7J3UnJx61",
+        "metadata": {}
+      },
+      {
+        "id": "msg_u1oQSQgBUNrI2ACAbKa2fCyf",
+        "object": "thread.message",
+        "created_at": 1699667617,
+        "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "HAUAHAUAHAUAHUHAUAAUAHAAU",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      },
+      {
+        "id": "msg_QQqRp8MeoBGknjbcQ77D8xxS",
+        "object": "thread.message",
+        "created_at": 1699667607,
+        "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Como uma IA focada em saúde, minha função é prestar assistência em questões relacionadas à saúde humana. Não estou programada para abordar outros temas. Se você tiver alguma dúvida ou preocupação de saúde, sinta-se à vontade para compartilhar comigo para que eu possa te ajudar da melhor maneira possível. Como posso auxiliá-lo(a) com sua saúde hoje?",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_6GBqNdGEex71cjMlkPA4P5t4",
+        "metadata": {}
+      },
+      {
+        "id": "msg_yepphUgCX3cvIZOmvq43dWam",
+        "object": "thread.message",
+        "created_at": 1699667606,
+        "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "FINISH",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      },
+      {
+        "id": "msg_0RxIG9xCu97Rg2Vyy7HdByb7",
+        "object": "thread.message",
+        "created_at": 1699667602,
+        "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Parece que você está tentando abordar um assunto fora da minha área de especialização, que é a saúde humana. Estou aqui para ajudar com quaisquer dúvidas ou preocupações relacionadas à saúde. Como posso auxiliar você hoje?",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_fChA2I6G4RE0GOLGLaI3AZDp",
+        "metadata": {}
+      },
+      {
+        "id": "msg_t2xdcnQFBxiJkh8fQjZSWwxa",
+        "object": "thread.message",
+        "created_at": 1699667601,
+        "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Finish",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      }
+    ],
+    "first_id": "msg_GovizwGetdmN0vwJ0biuGgIo",
+    "last_id": "msg_t2xdcnQFBxiJkh8fQjZSWwxa",
+    "has_more": false
+  },
+  "data": [
+    {
+      "id": "msg_GovizwGetdmN0vwJ0biuGgIo",
+      "object": "thread.message",
+      "created_at": 1699667628,
+      "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Eu estou aqui para ajudar com questões de saúde. Se você precisa de assistência ou tem alguma dúvida relacionada à saúde, por favor, me informe para que eu possa fornecer a ajuda necessária. Como posso ajudar você hoje com sua saúde?",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_BfXNnbPW0P2DtgzUy5m8P3LG",
+      "metadata": {}
+    },
+    {
+      "id": "msg_DhDLJrSqk5A3TVsU7D7khAaA",
+      "object": "thread.message",
+      "created_at": 1699667627,
+      "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "finish",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    },
+    {
+      "id": "msg_IxfWCqKPugPzqybSsc1UNWzI",
+      "object": "thread.message",
+      "created_at": 1699667618,
+      "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Estou aqui para ajudar com qualquer questão relacionada à saúde. Se você tiver alguma dúvida ou preocupação, por favor, compartilhe comigo para que eu possa oferecer a assistência adequada. Como posso auxiliá-lo(a) hoje em relação à sua saúde ou a serviços do SUS?",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_K5Dc9E1HM4fDuJe7J3UnJx61",
+      "metadata": {}
+    },
+    {
+      "id": "msg_u1oQSQgBUNrI2ACAbKa2fCyf",
+      "object": "thread.message",
+      "created_at": 1699667617,
+      "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "HAUAHAUAHAUAHUHAUAAUAHAAU",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    },
+    {
+      "id": "msg_QQqRp8MeoBGknjbcQ77D8xxS",
+      "object": "thread.message",
+      "created_at": 1699667607,
+      "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Como uma IA focada em saúde, minha função é prestar assistência em questões relacionadas à saúde humana. Não estou programada para abordar outros temas. Se você tiver alguma dúvida ou preocupação de saúde, sinta-se à vontade para compartilhar comigo para que eu possa te ajudar da melhor maneira possível. Como posso auxiliá-lo(a) com sua saúde hoje?",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_6GBqNdGEex71cjMlkPA4P5t4",
+      "metadata": {}
+    },
+    {
+      "id": "msg_yepphUgCX3cvIZOmvq43dWam",
+      "object": "thread.message",
+      "created_at": 1699667606,
+      "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "FINISH",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    },
+    {
+      "id": "msg_0RxIG9xCu97Rg2Vyy7HdByb7",
+      "object": "thread.message",
+      "created_at": 1699667602,
+      "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Parece que você está tentando abordar um assunto fora da minha área de especialização, que é a saúde humana. Estou aqui para ajudar com quaisquer dúvidas ou preocupações relacionadas à saúde. Como posso auxiliar você hoje?",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_fChA2I6G4RE0GOLGLaI3AZDp",
+      "metadata": {}
+    },
+    {
+      "id": "msg_t2xdcnQFBxiJkh8fQjZSWwxa",
+      "object": "thread.message",
+      "created_at": 1699667601,
+      "thread_id": "thread_6ouGW1mPc6XQOouXvWA7twNm",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Finish",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    }
+  ]
+}

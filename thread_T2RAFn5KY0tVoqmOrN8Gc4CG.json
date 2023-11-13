@@ -1,0 +1,504 @@
+{
+  "options": {
+    "method": "get",
+    "path": "/threads/thread_T2RAFn5KY0tVoqmOrN8Gc4CG/messages",
+    "query": {},
+    "headers": {
+      "OpenAI-Beta": "assistants=v1"
+    }
+  },
+  "response": {
+    "size": 0,
+    "timeout": 0
+  },
+  "body": {
+    "object": "list",
+    "data": [
+      {
+        "id": "msg_LRMfwXW9q855pCU96P6ZoGW6",
+        "object": "thread.message",
+        "created_at": 1699667581,
+        "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Caso precise de ajuda novamente, estarei aqui para oferecer suporte em questões de saúde. Cuide-se e tenha uma boa recuperação. Até a próxima!",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_RJaf5aN6FMkBNDv7PK3tSaUf",
+        "metadata": {}
+      },
+      {
+        "id": "msg_nEBPv6UGMjF9XlprBScPShBt",
+        "object": "thread.message",
+        "created_at": 1699667580,
+        "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "finish",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      },
+      {
+        "id": "msg_nT1MTiZ7otFz7OxLd2mL2EN0",
+        "object": "thread.message",
+        "created_at": 1699667570,
+        "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "De nada! Fico feliz em poder ajudar. Lembre-se de que estou aqui para auxiliar você sempre que tiver dúvidas ou preocupações com a sua saúde. Se a queimação persistir ou se você tiver alguma outra preocupação, não hesite em buscar aconselhamento médico. Cuide-se e espero que você se sinta melhor em breve!",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_x1Ho2hrYobxubqYloBnQi3wH",
+        "metadata": {}
+      },
+      {
+        "id": "msg_ZXsoPzUDKqK5puYPriCMAWao",
+        "object": "thread.message",
+        "created_at": 1699667568,
+        "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "ta bom maria, obrigada pela sua ajuda",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      },
+      {
+        "id": "msg_ptW80f0w1VW26LLtB0T2SPTe",
+        "object": "thread.message",
+        "created_at": 1699667508,
+        "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Sim, existem algumas medidas que podem ajudar a aliviar a queimação estomacal de forma mais rápida. Aqui estão algumas sugestões:\n\n1. **Beber água**: Beber um copo de água pode ajudar a diluir e lavar o ácido estomacal que subiu para o esôfago.\n\n2. **Antiacidos sem receita**: Medicamentos antiácidos podem neutralizar o ácido estomacal e proporcionar alívio rápido. Eles estão disponíveis em farmácias como comprimidos mastigáveis ou líquidos. Siga as instruções da embalagem cuidadosamente.\n\n3. **Bicarbonato de sódio**: Uma solução de meia colher de chá de bicarbonato de sódio em um copo de água pode aliviar a queimação. No entanto, esta é uma solução temporária e não deve ser usada frequentemente, pois pode causar desequilíbrio eletrolítico se usado em excesso.\n\n4. **Evitar movimentos que agravem a queimação**: Evite flexionar ou realizar atividades que exerçam pressão sobre o abdômen logo após as refeições.\n\n5. **Goma de mascar**: Mascar goma sem açúcar depois de comer pode estimular a produção de saliva, que ajuda a neutralizar o ácido estomacal.\n\n6. **Evitar fumar e beber álcool**: Ambos podem agravar a queimação e o desconforto.\n\nSe essas medidas não ajudarem ou se a queimação se tornar um problema recorrente, é importante falar com um médico para investigar as causas subjacentes e obter tratamento apropriado. Se esta é uma ocorrência rara para você e melhorar com estas sugestões, provavelmente não há motivo para preocupação. No entanto, sempre preste atenção à frequência e gravidade dos sintomas e, em caso de dúvida, consulte um profissional de saúde.",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_dVHfV8pq9lKMCsusqPOsjx8z",
+        "metadata": {}
+      },
+      {
+        "id": "msg_xN0J3CjBY6xcarqjd8NXCXuG",
+        "object": "thread.message",
+        "created_at": 1699667507,
+        "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Tem alguma coisa que eu possa fazer para que essa queimação passe logo?",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      },
+      {
+        "id": "msg_WXYNqng7A2QP7WXCiNMcomC2",
+        "object": "thread.message",
+        "created_at": 1699667464,
+        "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Parece que você pode estar experimentando uma azia pontual, possivelmente desencadeada pela refeição que você teve. Aqui estão algumas medidas gerais que você pode adotar para aliviar a queimação:\n\n1. **Evitar deitar-se logo após comer:** Esperar pelo menos duas a três horas antes de deitar pode ajudar a prevenir que o ácido estomacal suba para o esôfago.\n\n2. **Elevar a cabeça durante o sono:** Se a queimação persistir até a hora de dormir, tente elevar a cabeceira da cama ou usar travesseiros extras para manter a sua cabeça em uma posição mais elevada em relação ao estômago.\n\n3. **Evitar alimentos e bebidas desencadeadores:** Alimentos ácidos, picantes, gordurosos, bebidas com cafeína, álcool e refrigerantes podem agravar a azia.\n\n4. **Refeições menores e mais frequentes:** Comer porções menores ao longo do dia em vez de três refeições grandes pode reduzir a pressão no estômago.\n\n5. **Mastigar bem e comer calmamente:** Isso pode ajudar a reduzir a ingestão de ar e a velocidade com que você come, o que pode minimizar o risco de azia.\n\n6. **Antiacidos sem receita:** Se a queimação for muito incômoda, antiácidos de venda livre podem proporcionar alívio temporário. No entanto, é importante não exceder a dosagem recomendada e ler as instruções cuidadosamente.\n\nSe a queimação se tornar um evento recorrente, interferir nas suas atividades diárias, ou se você começar a apresentar outros sintomas como perda de peso não intencional, vômito, dificuldade para engolir ou fezes escuras, recomendo que você consulte um profissional de saúde para uma avaliação mais detalhada. Azia frequente pode ser um sinal de condições subjacentes que requerem tratamento específico.\n\nLembre-se de que este conselho é baseado nas informações proporcionadas e não substitui uma consulta médica presencial. Se a sua condição piorar ou você sentir-se incerto sobre a gravidade dos seus sintomas, procure atendimento médico imediatamente.",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_R8GWzVv3NilvWorcLEYrfp6E",
+        "metadata": {}
+      },
+      {
+        "id": "msg_dKcNqyqqkVUXwHJxbN6AgqSi",
+        "object": "thread.message",
+        "created_at": 1699667463,
+        "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Começou a mais ou menos 1h, não sinto mais nenhum outro sintoma por enquanto, foi depois que saí para jantar",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      },
+      {
+        "id": "msg_CjVdGGnkX1lDhLfyGI2Dh2Da",
+        "object": "thread.message",
+        "created_at": 1699667364,
+        "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "A queimação na boca do estômago, também conhecida como azia, pode ser causada por diversas razões, como ingestão de alimentos ácidos ou gordurosos, refluxo gastroesofágico, estresse, entre outros fatores. Para lhe aconselhar melhor, você poderia me informar se:\n\n1. A queimação é algo recente ou vem ocorrendo há algum tempo?\n2. Existem outros sintomas acompanhando essa queimação, como dor, vômito, tosse ou dificuldade para engolir?\n3. Você notou se há algum fator que desencadeia ou piora a queimação, como comer certo tipo de alimentos ou deitar-se após as refeições?\n\nCom essas informações, poderei ajudar você de maneira mais precisa.",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_o39DjQYYCYUDPTEPzdBfrZWr",
+        "metadata": {}
+      },
+      {
+        "id": "msg_Ew2F6ifGxr5D4TTwPsQfU9r9",
+        "object": "thread.message",
+        "created_at": 1699667363,
+        "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "estou sentindo uma queimação na boca do estômago",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      },
+      {
+        "id": "msg_BtMo0yK2k3a42ZxkUhEds8dF",
+        "object": "thread.message",
+        "created_at": 1699667349,
+        "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "Olá! Como posso ajudar você com suas questões de saúde hoje?",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+        "run_id": "run_cx2cIyGwt7pco0ftCsLQn8mz",
+        "metadata": {}
+      },
+      {
+        "id": "msg_88RvwbmNbDLfvjW6kmM629uF",
+        "object": "thread.message",
+        "created_at": 1699667348,
+        "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": {
+              "value": "olá maria",
+              "annotations": []
+            }
+          }
+        ],
+        "file_ids": [],
+        "assistant_id": null,
+        "run_id": null,
+        "metadata": {}
+      }
+    ],
+    "first_id": "msg_LRMfwXW9q855pCU96P6ZoGW6",
+    "last_id": "msg_88RvwbmNbDLfvjW6kmM629uF",
+    "has_more": false
+  },
+  "data": [
+    {
+      "id": "msg_LRMfwXW9q855pCU96P6ZoGW6",
+      "object": "thread.message",
+      "created_at": 1699667581,
+      "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Caso precise de ajuda novamente, estarei aqui para oferecer suporte em questões de saúde. Cuide-se e tenha uma boa recuperação. Até a próxima!",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_RJaf5aN6FMkBNDv7PK3tSaUf",
+      "metadata": {}
+    },
+    {
+      "id": "msg_nEBPv6UGMjF9XlprBScPShBt",
+      "object": "thread.message",
+      "created_at": 1699667580,
+      "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "finish",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    },
+    {
+      "id": "msg_nT1MTiZ7otFz7OxLd2mL2EN0",
+      "object": "thread.message",
+      "created_at": 1699667570,
+      "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "De nada! Fico feliz em poder ajudar. Lembre-se de que estou aqui para auxiliar você sempre que tiver dúvidas ou preocupações com a sua saúde. Se a queimação persistir ou se você tiver alguma outra preocupação, não hesite em buscar aconselhamento médico. Cuide-se e espero que você se sinta melhor em breve!",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_x1Ho2hrYobxubqYloBnQi3wH",
+      "metadata": {}
+    },
+    {
+      "id": "msg_ZXsoPzUDKqK5puYPriCMAWao",
+      "object": "thread.message",
+      "created_at": 1699667568,
+      "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "ta bom maria, obrigada pela sua ajuda",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    },
+    {
+      "id": "msg_ptW80f0w1VW26LLtB0T2SPTe",
+      "object": "thread.message",
+      "created_at": 1699667508,
+      "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Sim, existem algumas medidas que podem ajudar a aliviar a queimação estomacal de forma mais rápida. Aqui estão algumas sugestões:\n\n1. **Beber água**: Beber um copo de água pode ajudar a diluir e lavar o ácido estomacal que subiu para o esôfago.\n\n2. **Antiacidos sem receita**: Medicamentos antiácidos podem neutralizar o ácido estomacal e proporcionar alívio rápido. Eles estão disponíveis em farmácias como comprimidos mastigáveis ou líquidos. Siga as instruções da embalagem cuidadosamente.\n\n3. **Bicarbonato de sódio**: Uma solução de meia colher de chá de bicarbonato de sódio em um copo de água pode aliviar a queimação. No entanto, esta é uma solução temporária e não deve ser usada frequentemente, pois pode causar desequilíbrio eletrolítico se usado em excesso.\n\n4. **Evitar movimentos que agravem a queimação**: Evite flexionar ou realizar atividades que exerçam pressão sobre o abdômen logo após as refeições.\n\n5. **Goma de mascar**: Mascar goma sem açúcar depois de comer pode estimular a produção de saliva, que ajuda a neutralizar o ácido estomacal.\n\n6. **Evitar fumar e beber álcool**: Ambos podem agravar a queimação e o desconforto.\n\nSe essas medidas não ajudarem ou se a queimação se tornar um problema recorrente, é importante falar com um médico para investigar as causas subjacentes e obter tratamento apropriado. Se esta é uma ocorrência rara para você e melhorar com estas sugestões, provavelmente não há motivo para preocupação. No entanto, sempre preste atenção à frequência e gravidade dos sintomas e, em caso de dúvida, consulte um profissional de saúde.",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_dVHfV8pq9lKMCsusqPOsjx8z",
+      "metadata": {}
+    },
+    {
+      "id": "msg_xN0J3CjBY6xcarqjd8NXCXuG",
+      "object": "thread.message",
+      "created_at": 1699667507,
+      "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Tem alguma coisa que eu possa fazer para que essa queimação passe logo?",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    },
+    {
+      "id": "msg_WXYNqng7A2QP7WXCiNMcomC2",
+      "object": "thread.message",
+      "created_at": 1699667464,
+      "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Parece que você pode estar experimentando uma azia pontual, possivelmente desencadeada pela refeição que você teve. Aqui estão algumas medidas gerais que você pode adotar para aliviar a queimação:\n\n1. **Evitar deitar-se logo após comer:** Esperar pelo menos duas a três horas antes de deitar pode ajudar a prevenir que o ácido estomacal suba para o esôfago.\n\n2. **Elevar a cabeça durante o sono:** Se a queimação persistir até a hora de dormir, tente elevar a cabeceira da cama ou usar travesseiros extras para manter a sua cabeça em uma posição mais elevada em relação ao estômago.\n\n3. **Evitar alimentos e bebidas desencadeadores:** Alimentos ácidos, picantes, gordurosos, bebidas com cafeína, álcool e refrigerantes podem agravar a azia.\n\n4. **Refeições menores e mais frequentes:** Comer porções menores ao longo do dia em vez de três refeições grandes pode reduzir a pressão no estômago.\n\n5. **Mastigar bem e comer calmamente:** Isso pode ajudar a reduzir a ingestão de ar e a velocidade com que você come, o que pode minimizar o risco de azia.\n\n6. **Antiacidos sem receita:** Se a queimação for muito incômoda, antiácidos de venda livre podem proporcionar alívio temporário. No entanto, é importante não exceder a dosagem recomendada e ler as instruções cuidadosamente.\n\nSe a queimação se tornar um evento recorrente, interferir nas suas atividades diárias, ou se você começar a apresentar outros sintomas como perda de peso não intencional, vômito, dificuldade para engolir ou fezes escuras, recomendo que você consulte um profissional de saúde para uma avaliação mais detalhada. Azia frequente pode ser um sinal de condições subjacentes que requerem tratamento específico.\n\nLembre-se de que este conselho é baseado nas informações proporcionadas e não substitui uma consulta médica presencial. Se a sua condição piorar ou você sentir-se incerto sobre a gravidade dos seus sintomas, procure atendimento médico imediatamente.",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_R8GWzVv3NilvWorcLEYrfp6E",
+      "metadata": {}
+    },
+    {
+      "id": "msg_dKcNqyqqkVUXwHJxbN6AgqSi",
+      "object": "thread.message",
+      "created_at": 1699667463,
+      "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Começou a mais ou menos 1h, não sinto mais nenhum outro sintoma por enquanto, foi depois que saí para jantar",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    },
+    {
+      "id": "msg_CjVdGGnkX1lDhLfyGI2Dh2Da",
+      "object": "thread.message",
+      "created_at": 1699667364,
+      "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "A queimação na boca do estômago, também conhecida como azia, pode ser causada por diversas razões, como ingestão de alimentos ácidos ou gordurosos, refluxo gastroesofágico, estresse, entre outros fatores. Para lhe aconselhar melhor, você poderia me informar se:\n\n1. A queimação é algo recente ou vem ocorrendo há algum tempo?\n2. Existem outros sintomas acompanhando essa queimação, como dor, vômito, tosse ou dificuldade para engolir?\n3. Você notou se há algum fator que desencadeia ou piora a queimação, como comer certo tipo de alimentos ou deitar-se após as refeições?\n\nCom essas informações, poderei ajudar você de maneira mais precisa.",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_o39DjQYYCYUDPTEPzdBfrZWr",
+      "metadata": {}
+    },
+    {
+      "id": "msg_Ew2F6ifGxr5D4TTwPsQfU9r9",
+      "object": "thread.message",
+      "created_at": 1699667363,
+      "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "estou sentindo uma queimação na boca do estômago",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    },
+    {
+      "id": "msg_BtMo0yK2k3a42ZxkUhEds8dF",
+      "object": "thread.message",
+      "created_at": 1699667349,
+      "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "Olá! Como posso ajudar você com suas questões de saúde hoje?",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": "asst_Lpc5taxnpowDuMOfOZeiSvkM",
+      "run_id": "run_cx2cIyGwt7pco0ftCsLQn8mz",
+      "metadata": {}
+    },
+    {
+      "id": "msg_88RvwbmNbDLfvjW6kmM629uF",
+      "object": "thread.message",
+      "created_at": 1699667348,
+      "thread_id": "thread_T2RAFn5KY0tVoqmOrN8Gc4CG",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": {
+            "value": "olá maria",
+            "annotations": []
+          }
+        }
+      ],
+      "file_ids": [],
+      "assistant_id": null,
+      "run_id": null,
+      "metadata": {}
+    }
+  ]
+}

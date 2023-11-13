@@ -1,9 +1,15 @@
 const { Client, LocalAuth, MessageMedia, Buttons } = require('whatsapp-web.js');
 const { OpenAI } = require('openai');
 const fs = require('fs').promises; 
+const fsN = require('fs');
 const qrcode = require('qrcode-terminal');
 
+// const RATE_LIMIT_PERIOD = 2000; // 24 hours in milliseconds
+const RATE_LIMIT_PERIOD = 24 * 60 * 60 * 1000
+const MAX_MESSAGES_PER_PERIOD = 6; // Max messages allowed in the period
+
 const client = new Client({ authStrategy: new LocalAuth() });
+
 const openai = new OpenAI();
 
 let conversationStates = {};
@@ -24,7 +30,6 @@ async function saveThreadContentAndDelete(threadId, filePath) {
         console.error(`Error processing thread ${threadId}:`, error);
     }
 }
-
 
 async function getAssistantResponse(chatId, threadId, assistantId) {
     try {
@@ -138,6 +143,72 @@ async function waitForRunCompletion(threadId, runId) {
     });
 }
 
+async function ensureThreadId(chatId) {
+    if (!conversationStates[chatId] || !conversationStates[chatId].threadId) {
+        // If there's no conversation state or threadId for this chatId, create a new thread
+        console.log(`No valid threadId for chat ${chatId}, creating a new thread.`);
+        const thread = await openai.beta.threads.create();
+        console.log("New thread created with ID:", thread.id);
+
+        // Initialize or update the conversation state
+        conversationStates[chatId] = {
+            ...conversationStates[chatId],
+            threadId: thread.id,
+            lastAssistantMessageTimestamp: 0 // Initialize the timestamp if not already present
+        };
+    }
+}
+
+function checkAndUpdateRateLimit(chatId, now) {
+
+    // Check if state exists and add new properties if they're missing
+    if (conversationStates[chatId]) {
+        if (conversationStates[chatId].blocked === undefined) {
+            conversationStates[chatId].blocked = false;
+            conversationStates[chatId].messageCount = 1;
+            conversationStates[chatId].timestamp = now;
+        }
+        // Add checks for any other new properties here
+    } else {
+        // Initialize state for new chat
+        conversationStates[chatId] = {
+            messageCount: 1,
+            timestamp: now,
+            blocked: false,
+            threadId: '', // Initialize with empty string or appropriate value
+            lastAssistantMessageTimestamp: 0
+        };
+    }
+
+    let state = conversationStates[chatId];
+    console.log(`Current state: ${JSON.stringify(state)}`);
+
+    if (state.blocked) {
+        if (now - state.timestamp > RATE_LIMIT_PERIOD) {
+            // Reset the state after the period
+            state.messageCount = 1;
+            state.timestamp = now;
+            state.blocked = false;
+            console.log(`Block period ended, resetting state: ${JSON.stringify(state)}`);
+            return { allowed: true, timeLeft: 0 };
+        } else {
+            let timeLeft = RATE_LIMIT_PERIOD - (now - state.timestamp);
+            console.log(`User is still blocked, time left: ${timeLeft}`);
+            return { allowed: false, timeLeft: timeLeft };
+        }
+    } else {
+        if (state.messageCount >= MAX_MESSAGES_PER_PERIOD) {
+            state.blocked = true;
+            state.timestamp = now;
+            console.log(`User has hit the limit, blocking: ${JSON.stringify(state)}`);
+            return { allowed: false, timeLeft: RATE_LIMIT_PERIOD };
+        }
+        state.messageCount++;
+        console.log(`Incrementing message count: ${JSON.stringify(state)}`);
+        return { allowed: true, timeLeft: 0 };
+    }
+}
+
 
 client.on('qr', (qr) => {
     console.log('QR RECEIVED');
@@ -154,24 +225,39 @@ client.on('ready', () => {
 
 // Client message event listener
 client.on('message', async msg => {
+    const MARIA_ID = "asst_Lpc5taxnpowDuMOfOZeiSvkM"
+    const now = Date.now();
+
     const chatId = msg.from;
+
+    let currentState = conversationStates[chatId] ? {...conversationStates[chatId]} : null;
+
+
+    await ensureThreadId(chatId);
+
     const contact = await msg.getContact();
     const pushname = contact.pushname; 
     console.log(pushname)
     const getChatToCheckGroup = await msg.getChat()
     const preventGroup = getChatToCheckGroup.isGroup
 
-    const MARIA_ID = "asst_Lpc5taxnpowDuMOfOZeiSvkM"
+
+    let rateLimitCheck = checkAndUpdateRateLimit(chatId, now, currentState);
+    if (!rateLimitCheck.allowed) {
+        client.sendMessage(msg.from, `You have exceeded the message limit.`);
+        return;
+    }
 
     if (preventGroup) {
         console.log("Message from group")
         return;
     }
 
-    if (pushname === 'Gustavo Machado' || pushname === 'Amanda Lind' || pushname === "Pedro Pureza" || pushname === "Gisele Corrêa" || pushname === 'Matheus Homrich') {
+    if (pushname === 'Khiara' || pushname === "Pedro Pureza" ) {
+        
         await handleOpenAIInteraction(msg);
-
-       try {
+       
+        try {
             const assistantResponse = await getAssistantResponse(chatId, conversationStates[chatId].threadId, MARIA_ID);
             msg.reply(assistantResponse);
         } catch (error) {
@@ -180,16 +266,50 @@ client.on('message', async msg => {
         }
     }
 
+    // Check if the message is a sticker
+    if (msg.type === 'sticker') {
+        console.log('Received a sticker from', msg.from);
+        client.sendMessage(msg.from, "Desculpa, mas não sou capaz de responder adesivos!");
+        return;
+    }
+
+    if (msg.type === 'video') {
+        console.log('Received a video from', msg.from);
+        client.sendMessage(msg.from, "Desculpa, mas ainda não consigo assistir vídeos. Podemos tentar com uma foto, mensagem de áudio ou texto.");
+        return;
+    }
+
     if (msg.body === 'finish') {
         const threadId = conversationStates[chatId].threadId; // Replace with your thread ID
         const filePath = `./${conversationStates[chatId].threadId}.json`; // Replace with your desired file path
         await saveThreadContentAndDelete(threadId, filePath);
+    }
+
+    if (msg.body === 'audio' && pushname === 'Amanda Lind') {
+        const audio = fsN.readFileSync('saluteAmanda.mp3' ); // Replace with your audio file path
+        const media = new MessageMedia('audio/mp3', audio.toString('base64'), 'audio.mp3');
+
+        client.sendMessage(msg.from, media);
+    }
+
+    if (msg.body === 'audio' && pushname !== 'Amanda Lind') {
+        const audio = fsN.readFileSync('output.mp3' ); // Replace with your audio file path
+        const media = new MessageMedia('audio/mp3', audio.toString('base64'), 'audio.mp3');
+
+        client.sendMessage(msg.from, media);
     }
 });
 
 //MARIA BOOT SEQUENCE
 console.log("starting")
 client.initialize();
-// main();
 
 
+//NEXT STEPS:
+
+// prevent videos 
+// prevent stickers
+// handle finish
+// handle voice messages
+// handle images
+// Limit messages
