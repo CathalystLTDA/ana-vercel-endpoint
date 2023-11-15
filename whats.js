@@ -1,8 +1,8 @@
-const { Client, LocalAuth, MessageMedia, Buttons } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const { OpenAI } = require('openai');
-const fs = require('fs').promises; 
-const fsN = require('fs');
+const fs = require('fs'); 
 const qrcode = require('qrcode-terminal');
+const ffmpeg = require('fluent-ffmpeg');
 
 // const RATE_LIMIT_PERIOD = 2000; // 24 hours in milliseconds
 const RATE_LIMIT_PERIOD = 24 * 60 * 60 * 1000
@@ -13,6 +13,14 @@ const client = new Client({ authStrategy: new LocalAuth() });
 const openai = new OpenAI();
 
 let conversationStates = {};
+
+async function addMessageToThread(chatId, message, role) {
+    const threadId = conversationStates[chatId].threadId;
+    await openai.beta.threads.messages.create(threadId, { 
+        role: role, 
+        content: message 
+    });
+}
 
 async function saveThreadContentAndDelete(threadId, filePath) {
     try {
@@ -68,7 +76,7 @@ async function getAssistantResponse(chatId, threadId, assistantId) {
     }
 }
 
-async function handleOpenAIInteraction(msg) {
+async function handleOpenAIInteraction(msg, transcription) {
     const chatId = msg.from;
 
      if (conversationStates[chatId] && conversationStates[chatId].isRunActive) {
@@ -113,7 +121,7 @@ async function handleOpenAIInteraction(msg) {
     // Add the user's message to the thread
     const message = await openai.beta.threads.messages.create(threadId, { 
         role: "user", 
-        content: msg.body 
+        content: msg.body || transcription
     });
 
 }
@@ -159,6 +167,29 @@ async function ensureThreadId(chatId) {
     }
 }
 
+async function convertAudioToMp3(inputPath, outputPath) {
+    return new Promise((resolve, reject) => {
+        ffmpeg(inputPath)
+            .toFormat('mp3')
+            .on('end', () => {
+                fs.unlinkSync(inputPath); // Delete the original file
+                resolve(outputPath);
+            })
+            .on('error', (err) => reject(err))
+            .saveToFile(outputPath);
+    });
+}
+
+async function transcribeAudioWithWhisper(filePath) {
+    const transcription = await openai.audio.transcriptions.create({
+        file: fs.createReadStream(filePath),
+        model: "whisper-1",
+    });
+
+    fs.unlinkSync(filePath); // Delete the converted MP3 file
+    return transcription.text;
+}
+
 function checkAndUpdateRateLimit(chatId, now) {
 
     // Check if state exists and add new properties if they're missing
@@ -181,7 +212,7 @@ function checkAndUpdateRateLimit(chatId, now) {
     }
 
     let state = conversationStates[chatId];
-    console.log(`Current state: ${JSON.stringify(state)}`);
+    // console.log(`Current state: ${JSON.stringify(state)}`);
 
     if (state.blocked) {
         if (now - state.timestamp > RATE_LIMIT_PERIOD) {
@@ -209,6 +240,24 @@ function checkAndUpdateRateLimit(chatId, now) {
     }
 }
 
+// async function processAndRespond(msg, messageContent) {
+//     const MARIA_ID = "asst_Lpc5taxnpowDuMOfOZeiSvkM"
+//     const chatId = msg.from;
+
+//     if (msg.fromName === 'Luca Mandelli') {
+//         await handleOpenAIInteraction({
+//             from: chatId,
+//             body: messageContent
+//         });
+
+//         try {
+//             const assistantResponse = await getAssistantResponse(chatId, conversationStates[chatId].threadId, MARIA_ID);
+//             client.sendMessage(chatId, assistantResponse);
+//         } catch (error) {
+//             console.error(`Error retrieving response for ${chatId}:`, error);
+//         }
+//     }
+// }
 
 client.on('qr', (qr) => {
     console.log('QR RECEIVED');
@@ -253,19 +302,49 @@ client.on('message', async msg => {
         return;
     }
 
-    if (pushname === 'Khiara') {
-        await handleOpenAIInteraction(msg);
-       
-        try {
-            const assistantResponse = await getAssistantResponse(chatId, conversationStates[chatId].threadId, MARIA_ID);
-            msg.reply(assistantResponse);
-        } catch (error) {
-            console.error(`Error retrieving response for ${chatId}:`, error);
-            // Handle error appropriately
-        }
-    }
+    if (pushname === 'Gustavo Machado') {
+        if (msg.type === 'ptt') {
+                try {
+                    const audioMedia = await msg.downloadMedia();
+                    const audioBuffer = Buffer.from(audioMedia.data, 'base64');
+                    const audioPath = `./tempAudio.oga`; // OGG format file
+                    const convertedAudioPath = `./convertedAudio.mp3`; // Target MP3 format file
 
-    // Check if the message is a sticker
+                    fs.writeFileSync(audioPath, audioBuffer);
+
+                    // Convert audio to MP3
+                    await convertAudioToMp3(audioPath, convertedAudioPath);
+
+                    // Transcribe audio
+                    const transcription = await transcribeAudioWithWhisper(convertedAudioPath);
+                    console.log(`Transcription: ${transcription}`);
+                    await handleOpenAIInteraction(msg, transcription);
+
+                    // Process and respond to the transcribed text
+                    const assistantResponse = await getAssistantResponse(chatId, conversationStates[chatId].threadId, MARIA_ID);
+                    msg.reply(assistantResponse);
+
+                } catch (error) {
+                    console.error('Error processing voice message:', error);
+                }
+        } else {
+            await handleOpenAIInteraction(msg);
+            
+                // For other message types, process and respond directly with the message body
+                try {
+                    const assistantResponse = await getAssistantResponse(chatId, conversationStates[chatId].threadId, MARIA_ID);
+                    msg.reply(assistantResponse);
+                } catch (error) {
+                    console.error(`Error retrieving response for ${chatId}:`, error);
+                    // Handle error appropriately
+                }
+            }
+    }
+    
+    
+    // 
+
+
     if (msg.type === 'sticker') {
         console.log('Received a sticker from', msg.from);
         client.sendMessage(msg.from, "Desculpa, mas não sou capaz de responder adesivos!");
@@ -303,14 +382,14 @@ client.on('message', async msg => {
     }
 
     if (msg.body === 'audio' && pushname === 'Amanda Lind') {
-        const audio = fsN.readFileSync('saluteAmanda.mp3' ); // Replace with your audio file path
+        const audio = fs.readFileSync('saluteAmanda.mp3' ); // Replace with your audio file path
         const media = new MessageMedia('audio/mp3', audio.toString('base64'), 'audio.mp3');
 
         client.sendMessage(msg.from, media);
     }
 
     if (msg.body === 'audio' && pushname !== 'Amanda Lind') {
-        const audio = fsN.readFileSync('output.mp3' ); // Replace with your audio file path
+        const audio = fs.readFileSync('output.mp3' ); // Replace with your audio file path
         const media = new MessageMedia('audio/mp3', audio.toString('base64'), 'audio.mp3');
 
         client.sendMessage(msg.from, media);
