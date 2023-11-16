@@ -6,13 +6,15 @@ const ffmpeg = require('fluent-ffmpeg');
 
 // const RATE_LIMIT_PERIOD = 2000; // 24 hours in milliseconds
 const RATE_LIMIT_PERIOD = 24 * 60 * 60 * 1000
-const MAX_MESSAGES_PER_PERIOD = 6; // Max messages allowed in the period
+const MAX_MESSAGES_PER_PERIOD = 2; // Max messages allowed in the period
 
 const client = new Client({ authStrategy: new LocalAuth() });
 
 const openai = new OpenAI();
 
 let conversationStates = {};
+
+let acceptMessages = true;
 
 async function addMessageToThread(chatId, message, role) {
     const threadId = conversationStates[chatId].threadId;
@@ -26,7 +28,7 @@ async function saveThreadContentAndDelete(threadId, filePath) {
     try {
         // Fetch all messages from the thread
         const messagesList = await openai.beta.threads.messages.list(threadId);
-
+        console.log(messagesList)
         // Write messages to a JSON file
         await fs.writeFile(filePath, JSON.stringify(messagesList, null, 2));
 
@@ -190,7 +192,7 @@ async function transcribeAudioWithWhisper(filePath) {
     return transcription.text;
 }
 
-function checkAndUpdateRateLimit(chatId, now) {
+async function checkAndUpdateRateLimit(chatId, now) {
 
     // Check if state exists and add new properties if they're missing
     if (conversationStates[chatId]) {
@@ -212,7 +214,7 @@ function checkAndUpdateRateLimit(chatId, now) {
     }
 
     let state = conversationStates[chatId];
-    // console.log(`Current state: ${JSON.stringify(state)}`);
+    console.log(`Current state: ${JSON.stringify(state)}`);
 
     if (state.blocked) {
         if (now - state.timestamp > RATE_LIMIT_PERIOD) {
@@ -232,6 +234,9 @@ function checkAndUpdateRateLimit(chatId, now) {
             state.blocked = true;
             state.timestamp = now;
             console.log(`User has hit the limit, blocking: ${JSON.stringify(state)}`);
+            const threadId = conversationStates[chatId].threadId; // Replace with your thread ID
+            const filePath = `./${conversationStates[chatId].threadId}.json`; // Replace with your desired file path
+            await saveThreadContentAndDelete(threadId, filePath);
             return { allowed: false, timeLeft: RATE_LIMIT_PERIOD };
         }
         state.messageCount++;
@@ -239,25 +244,6 @@ function checkAndUpdateRateLimit(chatId, now) {
         return { allowed: true, timeLeft: 0 };
     }
 }
-
-// async function processAndRespond(msg, messageContent) {
-//     const MARIA_ID = "asst_Lpc5taxnpowDuMOfOZeiSvkM"
-//     const chatId = msg.from;
-
-//     if (msg.fromName === 'Luca Mandelli') {
-//         await handleOpenAIInteraction({
-//             from: chatId,
-//             body: messageContent
-//         });
-
-//         try {
-//             const assistantResponse = await getAssistantResponse(chatId, conversationStates[chatId].threadId, MARIA_ID);
-//             client.sendMessage(chatId, assistantResponse);
-//         } catch (error) {
-//             console.error(`Error retrieving response for ${chatId}:`, error);
-//         }
-//     }
-// }
 
 client.on('qr', (qr) => {
     console.log('QR RECEIVED');
@@ -268,18 +254,35 @@ client.on('authenticated', (session) => {
   console.log('AUTHENTICATED', session)
 })
 
+client.on('disconnected', (reason) => {
+    acceptMessages = false;
+    console.log('Disconnected:', reason);
+});
+
 client.on('ready', () => {
+    acceptMessages = true;
     console.log('Client is ready!');
 });
 
 // Client message event listener
 client.on('message', async msg => {
+    if (!acceptMessages) {
+        console.log('Ignoring message received while offline.');
+        return;
+    }
     const MARIA_ID = "asst_Lpc5taxnpowDuMOfOZeiSvkM"
     const now = Date.now();
 
     const chatId = msg.from;
 
     let currentState = conversationStates[chatId] ? {...conversationStates[chatId]} : null;
+
+    let rateLimitCheck = checkAndUpdateRateLimit(chatId, now, currentState);
+    if (!rateLimitCheck.allowed) {
+        client.sendMessage(msg.from, `You have exceeded the message limit.`);
+        return;
+    }
+
 
 
     await ensureThreadId(chatId);
@@ -291,18 +294,18 @@ client.on('message', async msg => {
     const preventGroup = getChatToCheckGroup.isGroup
 
 
-    let rateLimitCheck = checkAndUpdateRateLimit(chatId, now, currentState);
-    if (!rateLimitCheck.allowed) {
-        client.sendMessage(msg.from, `You have exceeded the message limit.`);
-        return;
-    }
-
     if (preventGroup) {
         console.log("Message from group")
         return;
     }
 
-    if (pushname === 'Gustavo Machado') {
+    if (pushname === 'Tobias Sartori' || pushname === 'Mateus Vidaletti' ) {
+       if (msg.type === 'sticker') {
+        console.log('Received a sticker from', msg.from);
+        client.sendMessage(msg.from, "Desculpa, mas não sou capaz de responder adesivos!");
+        return;
+       }
+
         if (msg.type === 'ptt') {
                 try {
                     const audioMedia = await msg.downloadMedia();
@@ -339,17 +342,9 @@ client.on('message', async msg => {
                     // Handle error appropriately
                 }
             }
-    }
-    
-    
-    // 
+    }    
 
-
-    if (msg.type === 'sticker') {
-        console.log('Received a sticker from', msg.from);
-        client.sendMessage(msg.from, "Desculpa, mas não sou capaz de responder adesivos!");
-        return;
-    }
+    
 
     if (msg.type === 'image') {
         console.log('Received an image from', msg.from);
@@ -375,12 +370,6 @@ client.on('message', async msg => {
         return;
     }
 
-    if (msg.body === 'finish') {
-        const threadId = conversationStates[chatId].threadId; // Replace with your thread ID
-        const filePath = `./${conversationStates[chatId].threadId}.json`; // Replace with your desired file path
-        await saveThreadContentAndDelete(threadId, filePath);
-    }
-
     if (msg.body === 'audio' && pushname === 'Amanda Lind') {
         const audio = fs.readFileSync('saluteAmanda.mp3' ); // Replace with your audio file path
         const media = new MessageMedia('audio/mp3', audio.toString('base64'), 'audio.mp3');
@@ -403,9 +392,5 @@ client.initialize();
 
 //NEXT STEPS:
 
-// prevent videos 
-// prevent stickers
-// handle finish
-// handle voice messages
 // handle images
-// Limit messages
+// handle voice messages
