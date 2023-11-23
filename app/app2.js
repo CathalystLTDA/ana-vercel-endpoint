@@ -10,7 +10,7 @@ const MAX_MESSAGES_PER_PERIOD = 2; // Max messages allowed in the period
 
 const client = new Client({ authStrategy: new LocalAuth() });
 
-const openai = new OpenAI();
+const openai = new OpenAI({ apiKey: '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' });
 
 let conversationStates = {};
 
@@ -46,13 +46,15 @@ async function getAssistantResponse(chatId, threadId, assistantId) {
         const run = await openai.beta.threads.runs.create(threadId, { assistant_id: assistantId });
 
         return new Promise((resolve, reject) => {
+            console.log(conversationStates[chatId].intervalId)
             conversationStates[chatId].intervalId = setInterval(async () => {
                 try {
                     const runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
 
                     if (runStatus.status === "completed") {
                         const messagesList = await openai.beta.threads.messages.list(threadId);
-
+                        console.log(messagesList.data.length);
+                        console.log(messagesList)
                         for (let i = messagesList.data.length - 1; i >= 0; i--) {
                             const msg = messagesList.data[i];
                             if (msg.role === 'assistant' && new Date(msg.created_at).getTime() > conversationStates[chatId].lastAssistantMessageTimestamp) {
@@ -193,7 +195,6 @@ async function transcribeAudioWithWhisper(filePath) {
 }
 
 async function checkAndUpdateRateLimit(chatId, now) {
-
     // Check if state exists and add new properties if they're missing
     if (conversationStates[chatId]) {
         if (conversationStates[chatId].blocked === undefined) {
@@ -238,7 +239,7 @@ async function checkAndUpdateRateLimit(chatId, now) {
             const filePath = `./${conversationStates[chatId].threadId}.json`; // Replace with your desired file path
             await saveThreadContentAndDelete(threadId, filePath);
             return { allowed: false, timeLeft: RATE_LIMIT_PERIOD };
-        }
+        }   
         state.messageCount++;
         console.log(`Incrementing message count: ${JSON.stringify(state)}`);
         return { allowed: true, timeLeft: 0 };
@@ -275,13 +276,14 @@ client.on('message', async msg => {
 
     const chatId = msg.from;
 
-    let currentState = conversationStates[chatId] ? {...conversationStates[chatId]} : null;
+    let currentState = conversationStates[chatId] ? { ...conversationStates[chatId] } : null;
+    console.log(currentState)
 
-    let rateLimitCheck = checkAndUpdateRateLimit(chatId, now, currentState);
-    if (!rateLimitCheck.allowed) {
-        client.sendMessage(msg.from, `You have exceeded the message limit.`);
-        return;
-    }
+    // let rateLimitCheck = checkAndUpdateRateLimit(chatId, now, currentState);
+    // if (!rateLimitCheck.allowed) {
+    //     client.sendMessage(msg.from, `You have exceeded the message limit.`);
+    //     return;
+    // }
 
 
 
@@ -299,7 +301,7 @@ client.on('message', async msg => {
         return;
     }
 
-    if (pushname === 'Tobias Sartori' || pushname === 'Mateus Vidaletti' ) {
+    if (pushname === 'Zago') {
        if (msg.type === 'sticker') {
         console.log('Received a sticker from', msg.from);
         client.sendMessage(msg.from, "Desculpa, mas não sou capaz de responder adesivos!");
@@ -334,7 +336,8 @@ client.on('message', async msg => {
             await handleOpenAIInteraction(msg);
             
                 // For other message types, process and respond directly with the message body
-                try {
+            try {
+                    console.log(conversationStates[chatId].threadId)
                     const assistantResponse = await getAssistantResponse(chatId, conversationStates[chatId].threadId, MARIA_ID);
                     msg.reply(assistantResponse);
                 } catch (error) {

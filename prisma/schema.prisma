@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserState {
+  chatId          String   @id
+  messageCount    Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  rateLimit       Int      @default(0)
+  isOnCooldown    Boolean  @default(false) 
+  cooldownCount   Int      @default(0)
+  threadId        String?
+  messages        Message[]
+  botResponses    BotResponse[]
+}
+
+model Message {
+  id              String     @id @default(uuid())
+  userState       UserState   @relation(fields: [chatId], references: [chatId], onDelete: Cascade)
+  chatId          String
+  content         String
+  messageType     String
+  receivedAt      DateTime   @default(now())
+  threadId        String 
+  botResponses    BotResponse[] 
+}
+
+model BotResponse {
+  id              String   @id @default(uuid())
+  respondingTo    Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  messageId       String
+  userState       UserState  @relation(fields: [chatId], references: [chatId], onDelete: Cascade)
+  chatId          String
+  assistantId     String
+  content         String
+  responseType    String
+  threadId        String
+  sentAt          DateTime @default(now())
+}
