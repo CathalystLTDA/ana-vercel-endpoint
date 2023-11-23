@@ -93,10 +93,44 @@ class OpenAIModule {
         return existingThread.id
     }
 
-    async handleAddMessageToThread(threadId, msg = null, transcription = null) {
+    async handleAddMessageToThread(threadId, msg) {
         await this.openai.beta.threads.messages.create(threadId, { 
             role: "user", 
-            content: msg.body || transcription
+            content: msg.body || transcription || location
+        });
+
+        const run = await this.openai.beta.threads.runs.create(threadId, { assistant_id: "asst_Lpc5taxnpowDuMOfOZeiSvkM" });
+
+        try {
+            const assistantMessageId = await waitForRunCompletion(threadId, run.id);
+            return [assistantMessageId, run.id]
+        } catch (error) {
+            console.error(`Error waiting for run completion for chat ${threadId}:`, error)
+            return;
+        }
+    }
+
+    async handleAddVoiceMessageToThread(threadId, transcription ) {
+        await this.openai.beta.threads.messages.create(threadId, { 
+            role: "user", 
+            content: transcription
+        });
+
+        const run = await this.openai.beta.threads.runs.create(threadId, { assistant_id: "asst_Lpc5taxnpowDuMOfOZeiSvkM" });
+
+        try {
+            const assistantMessageId = await waitForRunCompletion(threadId, run.id);
+            return [assistantMessageId, run.id]
+        } catch (error) {
+            console.error(`Error waiting for run completion for chat ${threadId}:`, error)
+            return;
+        }
+    }
+
+    async handleAddLocationMessageToThread(threadId, msg) {
+        await this.openai.beta.threads.messages.create(threadId, { 
+            role: "user", 
+            content: msg 
         });
 
         const run = await this.openai.beta.threads.runs.create(threadId, { assistant_id: "asst_Lpc5taxnpowDuMOfOZeiSvkM" });

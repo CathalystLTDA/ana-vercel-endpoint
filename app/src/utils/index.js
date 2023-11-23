@@ -22,6 +22,26 @@ async function convertAudioToMp3(inputPath, outputPath) {
     });
 }
 
+async function checkAudioDuration(outputPath) {
+  return new Promise((resolve, reject) => {
+    try { 
+      ffmpeg.ffprobe(outputPath, function(err, metadata) {
+        const duration = metadata.format.duration;
+        resolve(duration)
+        
+        if (err) {
+            console.error(err);
+            reject(err)
+            return;
+        }
+      });
+    } catch (err) {
+          reject(err)
+          console.error(err)
+    }
+  });
+}
+
 async function transcribeAudioWithWhisper(filePath) {
     const transcription = await openai.audio.transcriptions.create({
         file: fs.createReadStream(filePath),
@@ -138,12 +158,33 @@ async function checkAndUpdateRateLimit(chatId) {
   return 'Continue';
 }
 
+async function buscarEnderecoPorCoordenadas(lat, lng) {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.error) {
+            throw new Error('Não foi possível encontrar o endereço.');
+        } else {
+          // Retorna o endereço formatado
+          const address = `Meu endereço atual é: ${data.address.road}, ${data.address.house_number} em ${data.address.city}, ${data.address.state}, ${data.address.country}`
+          return address
+        }
+    } catch (error) {
+        console.error('Erro ao buscar endereço:', error);
+        return null;
+    }
+}
 
 module.exports = {
     runSleep,
     convertAudioToMp3,
     transcribeAudioWithWhisper,
     waitForRunCompletion,
-    checkAndUpdateRateLimit
+    checkAndUpdateRateLimit,
+    checkAudioDuration,
+    buscarEnderecoPorCoordenadas
 }
 
