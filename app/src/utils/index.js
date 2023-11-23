@@ -2,7 +2,9 @@ const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg');
 const { BASE_COOLDOWN, RATE_LIMIT, MAX_RATE_LIMIT_PERIOD } = require('../config')
 const prisma = require('../modules/database');
-const OpenAIModule = require('../openai')
+const { OpenAI } = require('openai');
+
+const openai = new OpenAI();
 
 function runSleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -42,17 +44,22 @@ async function checkAudioDuration(outputPath) {
 }
 
 async function transcribeAudioWithWhisper(filePath) {
-  const transcriptedText = await OpenAIModule.handleWhisperTranscription(filePath)
-  return transcriptedText
+    const transcription = await openai.audio.transcriptions.create({
+        file: fs.createReadStream(filePath),
+        model: "whisper-1",
+    });
+
+    fs.unlinkSync(filePath); // Delete the converted MP3 file
+    return transcription.text;
 }
 
 async function waitForRunCompletion(threadId, runId) {
     return new Promise((resolve, reject) => {
         const intervalId = setInterval(async () => {
             try {
-                const runStatus = await OpenAIModule.handleRunStatusCheck(threadId, runId);
+                const runStatus = await openai.beta.threads.runs.retrieve(threadId, runId);
                 if (runStatus.status === "completed") {
-                    const threadContent = await OpenAIModule.handleRetrieveThreadListContent(threadId);
+                    const threadContent = await openai.beta.threads.messages.list(threadId);
                     let lastAssistantMessage = null;
 
                     for (let i = 0; i < threadContent.data.length; i++) {

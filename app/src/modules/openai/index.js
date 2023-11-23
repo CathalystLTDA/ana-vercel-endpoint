@@ -1,7 +1,6 @@
 const { OpenAI } = require('openai');
 const { waitForRunCompletion } = require('../../utils');
 const prisma = require('../../modules/database');
-const fs = require('fs'); 
 
 require('dotenv').config();
 
@@ -143,25 +142,6 @@ class OpenAIModule {
         }
     }
 
-    async handleWhisperTranscription(filePath) {
-        const transcription = await openai.audio.transcriptions.create({
-            file: fs.createReadStream(filePath),
-            model: "whisper-1",
-        });
-
-        fs.unlinkSync(filePath); // Delete the converted MP3 file
-        return transcription.text;
-    }
-
-    async handleRunStatusCheck(threadId, runId) {
-        const runStatus = await openai.beta.threads.runs.retrieve(threadId, runId);
-        return runStatus
-    }
-
-    async handleRetrieveThreadListContent(threadId) {
-        const threadContent = await openai.beta.threads.messages.list(threadId);
-        return threadContent
-    }
 }
 
 module.exports = new OpenAIModule();
