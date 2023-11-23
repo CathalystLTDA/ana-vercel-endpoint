@@ -1,5 +1,5 @@
 module.exports = {
-    RATE_LIMIT_PERIOD: 24 * 60 * 60 * 1000,
-    MAX_MESSAGES_PER_PERIOD: 2,
-    // Adicione outras configurações aqui
+    BASE_COOLDOWN: 60 * 60 * 1000,
+    RATE_LIMIT: 11,
+    MAX_RATE_LIMIT_PERIOD: 16 * 60 * 60 * 1000,
 };

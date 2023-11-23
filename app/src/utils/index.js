@@ -1,9 +1,8 @@
-const { OpenAI } = require('openai');
 const fs = require('fs'); 
 const ffmpeg = require('fluent-ffmpeg');
+const { BASE_COOLDOWN, RATE_LIMIT, MAX_RATE_LIMIT_PERIOD } = require('../config')
 const prisma = require('../modules/database');
-
-const openai = new OpenAI({apiKey: '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'});
+const OpenAIModule = require('../openai')
 
 function runSleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -43,22 +42,17 @@ async function checkAudioDuration(outputPath) {
 }
 
 async function transcribeAudioWithWhisper(filePath) {
-    const transcription = await openai.audio.transcriptions.create({
-        file: fs.createReadStream(filePath),
-        model: "whisper-1",
-    });
-
-    fs.unlinkSync(filePath); // Delete the converted MP3 file
-    return transcription.text;
+  const transcriptedText = await OpenAIModule.handleWhisperTranscription(filePath)
+  return transcriptedText
 }
 
 async function waitForRunCompletion(threadId, runId) {
     return new Promise((resolve, reject) => {
         const intervalId = setInterval(async () => {
             try {
-                const runStatus = await openai.beta.threads.runs.retrieve(threadId, runId);
+                const runStatus = await OpenAIModule.handleRunStatusCheck(threadId, runId);
                 if (runStatus.status === "completed") {
-                    const threadContent = await openai.beta.threads.messages.list(threadId);
+                    const threadContent = await OpenAIModule.handleRetrieveThreadListContent(threadId);
                     let lastAssistantMessage = null;
 
                     for (let i = 0; i < threadContent.data.length; i++) {
@@ -89,14 +83,13 @@ async function checkAndUpdateRateLimit(chatId) {
   }
 
   // Cálculo do tempo de cooldown com base no cooldownCount
-  const baseCooldown = 60 * 60 * 1000; // 1 hora em milissegundos
-  let cooldownTime = baseCooldown 
+  let cooldownTime = BASE_COOLDOWN 
   if (userState.cooldownCount === 1) {
     cooldownTime
   } else {   
    cooldownTime = cooldownTime * Math.pow(2, userState.cooldownCount)
   }
-  cooldownTime = Math.min(cooldownTime, 16 * 60 * 60 * 1000); // Máximo de 16 horas
+  cooldownTime = Math.min(cooldownTime, MAX_RATE_LIMIT_PERIOD); // Máximo de 16 horas
 
   // Verificar se a última mensagem foi recebida há mais que o tempo de cooldown para resetar o rateLimit
   const lastMessage = await prisma.message.findFirst({
@@ -128,7 +121,7 @@ async function checkAndUpdateRateLimit(chatId) {
     where: { chatId: chatId },
   });
 
-  if (updatedUserState.rateLimit >= 11) {
+  if (updatedUserState.rateLimit >= RATE_LIMIT) {
     // Colocar o usuário em cooldown e incrementar cooldownCount
     if (userState.isOnCooldown !== true) {
       await prisma.userState.update({

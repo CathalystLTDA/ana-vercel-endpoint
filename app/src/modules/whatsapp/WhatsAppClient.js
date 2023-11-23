@@ -1,15 +1,11 @@
-// src/whatsapp/WhatsAppClient.js
-// const { Client, RemoteAuth } = require('whatsapp-web.js');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const fs = require('fs'); 
-const ffmpeg = require('fluent-ffmpeg');
-
 const qrcode = require('qrcode-terminal');
-
-const OpenAIModule = require('../openai')
 
 const { saveConversationState, saveBotResponse } = require('../../utils/ConversationStateManager');
 const { convertAudioToMp3, transcribeAudioWithWhisper, checkAndUpdateRateLimit, checkAudioDuration, buscarEnderecoPorCoordenadas } = require('../../utils');
+
+const OpenAIModule = require('../openai')
 
 require('dotenv').config();
 
@@ -75,7 +71,6 @@ class WhatsAppClient {
                                 } else {
                                     // Transcribe audio
                                     const transcription = await transcribeAudioWithWhisper(convertedAudioPath);
-                                    console.log(`Transcription: ${transcription}`);
                                     const [newAssistantMessage, rundId] = await OpenAIModule.handleAddVoiceMessageToThread(threadId, transcription);
                                     const userMessage = transcription
                                     const userMessageId = await saveConversationState(chatId, userMessage, messageType, threadId, process.env.OPENAI_ASSISTANT_ID);
@@ -108,7 +103,6 @@ class WhatsAppClient {
                                     .catch(error => console.error(error));
                                 
                                 userMessage = address
-                                console.log(userMessage)
                                 const [newAssistantMessage, rundId] = await OpenAIModule.handleAddLocationMessageToThread(threadId, userMessage);
                                 const userMessageId = await saveConversationState(chatId, userMessage, messageType, threadId, process.env.OPENAI_ASSISTANT_ID);
                 
@@ -123,7 +117,6 @@ class WhatsAppClient {
                                 }
                             } else {
                                 userMessage = msg.body
-                                console.log(userMessage)
                                 const [newAssistantMessage, rundId] = await OpenAIModule.handleAddMessageToThread(threadId, msg);
                                 const userMessageId = await saveConversationState(chatId, userMessage, messageType, threadId, process.env.OPENAI_ASSISTANT_ID);
                 
