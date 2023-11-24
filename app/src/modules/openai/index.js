@@ -97,6 +97,7 @@ class OpenAIModule {
             content: msg.body || transcription || location
         });
 
+        // TEMPORARY - REMOVE KEY
         const run = await this.openai.beta.threads.runs.create(threadId, { assistant_id: "asst_Lpc5taxnpowDuMOfOZeiSvkM" });
 
         try {

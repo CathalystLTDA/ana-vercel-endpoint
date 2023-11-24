@@ -16,6 +16,7 @@ model UserState {
   isOnCooldown    Boolean  @default(false) 
   cooldownCount   Int      @default(0)
   threadId        String?
+  acceptedTerms   Boolean @default(false)
   messages        Message[]
   botResponses    BotResponse[]
 }

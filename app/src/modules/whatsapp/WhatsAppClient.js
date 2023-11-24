@@ -1,9 +1,9 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia, Buttons } = require('whatsapp-web.js');
 const fs = require('fs'); 
 const qrcode = require('qrcode-terminal');
 
 const { saveConversationState, saveBotResponse } = require('../../utils/ConversationStateManager');
-const { convertAudioToMp3, transcribeAudioWithWhisper, checkAndUpdateRateLimit, checkAudioDuration, buscarEnderecoPorCoordenadas } = require('../../utils');
+const { convertAudioToMp3, transcribeAudioWithWhisper, checkAndUpdateRateLimit, checkAudioDuration, findAddress, checkRunStatusAndWait, isValidMessageType } = require('../../utils');
 
 const OpenAIModule = require('../openai')
 
@@ -22,7 +22,7 @@ class WhatsAppClient {
 
             client.on('qr', (qr) => {
                 console.log('QR RECEIVED');
-                qrcode.generate(qr, { small: true })
+                qrcode.generate(qr, { small: false })
             });
 
             client.on('remote_session_saved', () => {
@@ -36,20 +36,30 @@ class WhatsAppClient {
             client.on('message', async msg => {
                 const chatId = msg.from;
                 const messageType = msg.type;
-
                 const threadId = await OpenAIModule.ensureThreadId(chatId)
-
+                
                 const rateLimitCheckState = await checkAndUpdateRateLimit(chatId)
 
-                if (!['chat', 'ptt', 'text', 'location'].includes(messageType)) {
-                    const messageContent = msg.body
-                    const defaultMessage = "Desculpe, no momento só posso responder a mensagens de texto e áudio.";
-                    msg.reply(defaultMessage);
+                console.log(`New message from: ${chatId}. Message Content: ${msg.body}`)
 
-                    await saveConversationState(chatId, messageContent, messageType.toString(), threadId, false);
-                } else {
-                    if (rateLimitCheckState.startsWith("CooldownActivated timeLeft")) {
-                        client.sendMessage(msg.from, `Obrigado por falar comigo, muito prazer em lhe conhecer e espero que eu tenha te ajudado! Como estou em versão Alpha e fase de testes, no momento você utilizou todas as mensagens do período de testes. Mas ta tudo certo, espere mais ${rateLimitCheckState.slice(26)} para me chamar de novo e iniciar outra conversa.`);
+                if (await checkRunStatusAndWait(threadId)) {
+                    msg.reply("* 🚫 Percebi que você mandou outra mensagem, mas eu ainda estava processando a anterior. Como estou em fase de testes, peço para que mande apenas mensagens indviduais e aguarde minha resposta antes de mandar outra mensagem (Essa mensagem será desconsiderada).*")
+                    return;
+                }
+
+                if (msg.type === 'e2e_notification' || msg.type === 'notification_template') {
+                    console.log("WhatsApp System message")
+                    return;
+                }
+
+                if (!isValidMessageType(messageType)) {
+                    console.log("Tipo de mensagem não suportado:", messageType);
+                    msg.reply("Desculpe, no momento só posso responder a mensagens de texto e áudio.");
+                    return; // Retorna cedo se o tipo de mensagem não é suportado
+                }
+
+                if (rateLimitCheckState.startsWith("CooldownActivated timeLeft")) {
+                    client.sendMessage(msg.from, `Obrigado por falar comigo, muito prazer em lhe conhecer e espero que eu tenha te ajudado! Como estou em versão Alpha e fase de testes, no momento você utilizou todas as mensagens do período de testes. Mas ta tudo certo, espere mais ${rateLimitCheckState.slice(26)} para me chamar de novo e iniciar outra conversa.`);
                     } else {
                         if (msg.type === 'ptt') {
                             try {
@@ -98,7 +108,7 @@ class WhatsAppClient {
                             let address = null
                             let userMessage = null
                             if (msg.type === 'location') {
-                                await buscarEnderecoPorCoordenadas(msg.location.latitude, msg.location.longitude)
+                                await findAddress(msg.location.latitude, msg.location.longitude)
                                     .then(endereco => address = endereco)
                                     .catch(error => console.error(error));
                                 
@@ -132,7 +142,6 @@ class WhatsAppClient {
                             } 
                         }
                     }
-                }
             });
 
             return client.initialize();

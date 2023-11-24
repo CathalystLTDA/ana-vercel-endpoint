@@ -53,6 +53,21 @@ async function transcribeAudioWithWhisper(filePath) {
     return transcription.text;
 }
 
+async function checkRunStatusAndWait(threadId) {
+  const runs = await openai.beta.threads.runs.list(
+      threadId
+  );
+
+  for (let i = 0; i < runs.data.length; i++) {
+    console.log(runs.data[i].status)
+    if (runs.data[i].status !== "completed") {
+      console.log("Run not finished")
+      return true;
+    }
+    return false
+  }
+}
+
 async function waitForRunCompletion(threadId, runId) {
     return new Promise((resolve, reject) => {
         const intervalId = setInterval(async () => {
@@ -158,7 +173,7 @@ async function checkAndUpdateRateLimit(chatId) {
   return 'Continue';
 }
 
-async function buscarEnderecoPorCoordenadas(lat, lng) {
+async function findAddress(lat, lng) {
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
 
     try {
@@ -178,6 +193,23 @@ async function buscarEnderecoPorCoordenadas(lat, lng) {
     }
 }
 
+async function checkFirstMessage(chatId) {
+  const checkIfUserExists = await prisma.userState.findUnique({
+          where: { chatId: chatId }
+  });
+
+  if (!checkIfUserExists) {
+    return true
+  }
+
+  return false
+}
+
+function isValidMessageType(messageType) {
+    const acceptedMessageTypes = ['chat', 'ptt', 'text', 'location'];
+    return acceptedMessageTypes.includes(messageType);
+}
+
 module.exports = {
     runSleep,
     convertAudioToMp3,
@@ -185,6 +217,9 @@ module.exports = {
     waitForRunCompletion,
     checkAndUpdateRateLimit,
     checkAudioDuration,
-    buscarEnderecoPorCoordenadas
+    findAddress,
+    checkRunStatusAndWait,
+    checkFirstMessage,
+    isValidMessageType
 }
 
