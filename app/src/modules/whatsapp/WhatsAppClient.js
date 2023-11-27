@@ -22,7 +22,7 @@ class WhatsAppClient {
 
             client.on('qr', (qr) => {
                 console.log('QR RECEIVED');
-                qrcode.generate(qr, { small: false })
+                qrcode.generate(qr, { small: true })
             });
 
             client.on('remote_session_saved', () => {
