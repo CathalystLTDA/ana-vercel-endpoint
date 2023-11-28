@@ -44,3 +44,15 @@ model BotResponse {
   threadId        String
   sentAt          DateTime @default(now())
 }
+
+model Feedback {
+  feedbackId      String       @id
+  username        String?
+  phoneNumber     String?
+  userEmail       String?
+  content         String 
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime
+  reachRateLimit  Boolean?
+  wannaHelp       Boolean?
+}

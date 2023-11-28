@@ -4,7 +4,9 @@ const { BASE_COOLDOWN, RATE_LIMIT, MAX_RATE_LIMIT_PERIOD } = require('../config'
 const prisma = require('../modules/database');
 const { OpenAI } = require('openai');
 
-const openai = new OpenAI();
+require('dotenv').config();
+
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 function runSleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
