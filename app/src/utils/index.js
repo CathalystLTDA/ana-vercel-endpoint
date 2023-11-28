@@ -195,7 +195,7 @@ async function findAddress(lat, lng) {
 
 async function checkFirstMessage(chatId) {
   const checkIfUserExists = await prisma.userState.findUnique({
-          where: { chatId: chatId }
+    where: { chatId: chatId }
   });
 
   if (!checkIfUserExists) {
@@ -205,9 +205,72 @@ async function checkFirstMessage(chatId) {
   return false
 }
 
+async function checkTotalUserCount() {
+  const totalUserCount = await prisma.userState.count()
+  return totalUserCount
+}
+
 function isValidMessageType(messageType) {
-    const acceptedMessageTypes = ['chat', 'ptt', 'text', 'location'];
-    return acceptedMessageTypes.includes(messageType);
+  const acceptedMessageTypes = ['chat', 'ptt', 'text', 'location'];
+  return acceptedMessageTypes.includes(messageType);
+}
+
+async function checkTotalUserCountDay() {
+  const now = new Date();
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+  const totalUserCount = await prisma.userState.count({
+    where: {
+      createdAt: {
+        gte: startOfDay,
+        lt: endOfDay,
+      },
+    },
+  });
+
+  return totalUserCount;
+}
+
+async function checkTotalMessagesCount() {
+  const totalUserMessages = await prisma.message.count()
+  const totalBotMessages = await prisma.botResponse.count()
+  const totalMessages = totalUserMessages + totalBotMessages
+  return [totalUserMessages, totalBotMessages, totalMessages]
+}
+
+async function checkTotalMessagesCountDay() {
+  const now = new Date();
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+  const totalMessagesCount = await prisma.message.count({
+    where: {
+      createdAt: {
+        gte: startOfDay,
+        lt: endOfDay,
+      },
+    },
+  });
+
+  const totalBotResponsesCount = await prisma.message.count({
+    where: {
+      createdAt: {
+        gte: startOfDay,
+        lt: endOfDay,
+      },
+    },
+  });
+
+  const totalMessages = totalUserMessages + totalBotMessages
+
+
+  return [totalMessagesCount, totalBotResponsesCount, totalMessages]
+}
+
+
+async function handleAdminCheck() {
+  
 }
 
 module.exports = {
@@ -220,6 +283,10 @@ module.exports = {
     findAddress,
     checkRunStatusAndWait,
     checkFirstMessage,
-    isValidMessageType
+    isValidMessageType,
+    checkTotalUserCount,
+    checkTotalUserCountDay,
+    checkTotalMessagesCount,
+    checkTotalMessagesCountDay
 }
 

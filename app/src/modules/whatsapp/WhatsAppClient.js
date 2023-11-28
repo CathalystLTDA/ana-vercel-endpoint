@@ -1,13 +1,27 @@
 const { Client, LocalAuth, MessageMedia, Buttons } = require('whatsapp-web.js');
 const fs = require('fs'); 
 const qrcode = require('qrcode-terminal');
-
+const { ADMIN_COMMANDS } = require('../../config')
 const { saveConversationState, saveBotResponse } = require('../../utils/ConversationStateManager');
-const { convertAudioToMp3, transcribeAudioWithWhisper, checkAndUpdateRateLimit, checkAudioDuration, findAddress, checkRunStatusAndWait, isValidMessageType } = require('../../utils');
+const {
+    convertAudioToMp3,
+    transcribeAudioWithWhisper,
+    checkAndUpdateRateLimit,
+    checkAudioDuration,
+    findAddress,
+    checkRunStatusAndWait,
+    isValidMessageType,
+    checkTotalUserCount,
+    checkTotalUserCountDay,
+    checkTotalMessagesCount,
+    checkTotalMessagesCountDay
+    } = require('../../utils');
 
 const OpenAIModule = require('../openai')
 
 require('dotenv').config();
+
+let userTimers = {};
 
 class WhatsAppClient {
     constructor() {
@@ -40,6 +54,11 @@ class WhatsAppClient {
                 
                 const rateLimitCheckState = await checkAndUpdateRateLimit(chatId)
 
+                if (userTimers[chatId]) {
+                    clearTimeout(userTimers[chatId]);
+                    delete userTimers[chatId];
+                }
+
                 console.log(`New message from: ${chatId}. Message Content: ${msg.body}`)
 
                 if (await checkRunStatusAndWait(threadId)) {
@@ -55,12 +74,13 @@ class WhatsAppClient {
                 if (!isValidMessageType(messageType)) {
                     console.log("Tipo de mensagem não suportado:", messageType);
                     msg.reply("Desculpe, no momento só posso responder a mensagens de texto e áudio.");
-                    return; // Retorna cedo se o tipo de mensagem não é suportado
+                    return; 
                 }
 
                 if (rateLimitCheckState.startsWith("CooldownActivated timeLeft")) {
-                    client.sendMessage(msg.from, `Obrigado por falar comigo, muito prazer em lhe conhecer e espero que eu tenha te ajudado! Como estou em versão Alpha e fase de testes, no momento você utilizou todas as mensagens do período de testes. Mas ta tudo certo, espere mais ${rateLimitCheckState.slice(26)} para me chamar de novo e iniciar outra conversa.`);
-                    } else {
+                    client.sendMessage(msg.from, `Obrigado por interagir comig e espero que eu tenha te ajudado! Seu feedback é super importante para que eu possa entender melhor como ajudar a todos. Por favor, compartilhe suas impressões aqui: https://maria-sigma.vercel.app/feedback. Como estou em fase Alpha de desenvolvimento e testes, o limite de mensagens foi atingido. Mas não se preocupe, você poderá falar comigo novamente em ${rateLimitCheckState.slice(26)}. Até lá!`);
+                    return    
+                } else {
                         if (msg.type === 'ptt') {
                             try {
                                 const audioMedia = await msg.downloadMedia();
@@ -79,18 +99,21 @@ class WhatsAppClient {
                                     fs.unlinkSync(convertedAudioPath)
                                     msg.reply("Desculpa, mas por enquanto eu ainda não posso ouvir áudios com 20 segundos ou mais. Vamos tentar de novo?")
                                 } else {
-                                    // Transcribe audio
                                     const transcription = await transcribeAudioWithWhisper(convertedAudioPath);
                                     const [newAssistantMessage, rundId] = await OpenAIModule.handleAddVoiceMessageToThread(threadId, transcription);
                                     const userMessage = transcription
                                     const userMessageId = await saveConversationState(chatId, userMessage, messageType, threadId, process.env.OPENAI_ASSISTANT_ID);
 
                                     try {
-                                        // Process and respond to the transcribed text
                                         const assistantResponse = await OpenAIModule.getAssistantResponse(threadId, rundId, newAssistantMessage)
                                         msg.reply(assistantResponse);
 
                                         await saveBotResponse(userMessageId, chatId, assistantResponse, threadId, process.env.OPENAI_ASSISTANT_ID);
+
+                                        userTimers[chatId] = setTimeout(() => {
+                                        msg.reply("Espero que eu tenha te ajudado! Se tiver um momento, adoraria receber seu feedback sobre a sua experiência comigo, é muito importante para que eu possa entender melhor como ajudar a todos! Você pode deixar seu feedback aqui: https://maria-sigma.vercel.app/feedback. Obrigado por usar a MARIA e esperamos conversar com você novamente!");
+                                        delete userTimers[chatId];
+                                    }, 600000);
                                     } catch (error) {
                                         console.error('Erro ao receber mensagem do Assistant: ', error);
                                         msg.reply('Desculpe, ocorreu um erro ao processar sua mensagem.');
@@ -121,6 +144,11 @@ class WhatsAppClient {
                                     msg.reply(assistantResponse);
 
                                     await saveBotResponse(userMessageId, chatId, assistantResponse, threadId, process.env.OPENAI_ASSISTANT_ID);
+
+                                    userTimers[chatId] = setTimeout(() => {
+                                        msg.reply("Espero que eu tenha te ajudado! Se tiver um momento, adoraria receber seu feedback sobre a sua experiência comigo, é muito importante para que eu possa entender melhor como ajudar a todos! Você pode deixar seu feedback aqui: https://maria-sigma.vercel.app/feedback. Obrigado por usar a MARIA e esperamos conversar com você novamente!");
+                                        delete userTimers[chatId];
+                                    }, 600000);
                                 } catch (error) {
                                     console.error('Erro ao receber mensagem do Assistant: ', error);
                                     msg.reply('Desculpe, ocorreu um erro ao processar sua mensagem.');
@@ -135,6 +163,11 @@ class WhatsAppClient {
                                     msg.reply(assistantResponse);
 
                                     await saveBotResponse(userMessageId, chatId, assistantResponse, threadId, process.env.OPENAI_ASSISTANT_ID);
+
+                                    userTimers[chatId] = setTimeout(() => {
+                                        client.sendMessage(chatId,"Espero que eu tenha te ajudado! Se tiver um momento, adoraria receber seu feedback sobre a sua experiência comigo, é muito importante para que eu possa entender melhor como ajudar a todos! Você pode deixar seu feedback aqui: https://maria-sigma.vercel.app/feedback. Obrigado por usar a MARIA e esperamos conversar com você novamente!");
+                                        delete userTimers[chatId];
+                                    }, 600000);
                                 } catch (error) {
                                     console.error('Erro ao receber mensagem do Assistant: ', error);
                                     msg.reply('Desculpe, ocorreu um erro ao processar sua mensagem.');
