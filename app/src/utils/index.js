@@ -186,7 +186,7 @@ async function findAddress(lat, lng) {
             throw new Error('Não foi possível encontrar o endereço.');
         } else {
           // Retorna o endereço formatado
-          const address = `Meu endereço atual é: ${data.address.road}, ${data.address.house_number} em ${data.address.city}, ${data.address.state}, ${data.address.country}`
+          const address = `Meu endereço atual é: ${data.address.road}, ${data.address?.house_number}, no bairro ${data.address.suburb} em ${data.address.city}, ${data.address.state}, CEP: ${data.address.postcode} ${data.address.country}`
           return address
         }
     } catch (error) {
