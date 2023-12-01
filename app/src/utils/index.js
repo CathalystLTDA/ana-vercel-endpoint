@@ -6,7 +6,7 @@ const { OpenAI } = require('openai');
 
 require('dotenv').config();
 
-const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
+const openai = new OpenAI();
 
 function runSleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -74,7 +74,43 @@ async function waitForRunCompletion(threadId, runId) {
     return new Promise((resolve, reject) => {
         const intervalId = setInterval(async () => {
             try {
-                const runStatus = await openai.beta.threads.runs.retrieve(threadId, runId);
+              const runStatus = await openai.beta.threads.runs.retrieve(threadId, runId);
+              console.log(runStatus.status)
+              if (runStatus.status === "in_progress") { 
+                console.log("Skipping in_progress")
+              }
+
+              if (runStatus.status === "requires_action") {
+                    console.log("Requires Action!");
+                    const toolCall = runStatus.required_action.submit_tool_outputs.tool_calls[0];
+                    const name = toolCall.function.name;
+                    const arguments = JSON.parse(toolCall.function.arguments);
+                    console.log(arguments);
+
+                    if (name === "getPharmacy" || name === "get_pharmacy") { 
+                        // Check if the function to call is getPharmacy
+                        const responses = await getPharmacy(arguments.latitude, arguments.longitude);
+                        console.log(responses);
+
+                        // Submit tool outputs only if the run is not in_progress
+                        if (runStatus.status !== "in_progress") {
+                            const run = await openai.beta.threads.runs.submitToolOutputs(
+                                threadId,
+                                runId,
+                                {
+                                    tool_outputs: [{
+                                        "tool_call_id": toolCall.id,
+                                        "output": JSON.stringify(responses),
+                                    }]
+                                }
+                            );
+                            console.log(run);
+                        } else {
+                            console.log("Run is still in progress, cannot submit tool outputs.");
+                        }
+                    }
+                }
+
                 if (runStatus.status === "completed") {
                     const threadContent = await openai.beta.threads.messages.list(threadId);
                     let lastAssistantMessage = null;
@@ -92,7 +128,7 @@ async function waitForRunCompletion(threadId, runId) {
                 clearInterval(intervalId);
                 reject(error);
             }
-        }, 1000); // Check every second, adjust as needed
+        }, 1500); // Check every second, adjust as needed
     });
 }
 
@@ -271,8 +307,32 @@ async function checkTotalMessagesCountDay() {
 }
 
 
-async function handleAdminCheck() {
-  
+async function getPharmacy(latitude, longitude) {
+    const apiKey = process.env.GOOGLE_API_KEY; // Replace with your actual API key
+    const radius = 1000; // in meters
+    const pharmacyType = 'pharmacy';
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${pharmacyType}&key=${apiKey}`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+
+        if (data.status !== 'OK') {
+            throw new Error(data.error_message || 'Error fetching data');
+        }
+
+        return data.results.map(place => ({
+            name: place.name,
+            vicinity: place.vicinity,
+            open_now: place.opening_hours
+        }));
+    } catch (error) {
+        console.error('Error fetching pharmacy data:', error);
+        return null;
+    }
 }
 
 module.exports = {
@@ -289,6 +349,7 @@ module.exports = {
     checkTotalUserCount,
     checkTotalUserCountDay,
     checkTotalMessagesCount,
-    checkTotalMessagesCountDay
+    checkTotalMessagesCountDay,
+    getPharmacy
 }
 

@@ -11,10 +11,6 @@ const {
     findAddress,
     checkRunStatusAndWait,
     isValidMessageType,
-    checkTotalUserCount,
-    checkTotalUserCountDay,
-    checkTotalMessagesCount,
-    checkTotalMessagesCountDay
     } = require('../../utils');
 
 const OpenAIModule = require('../openai')
@@ -31,10 +27,7 @@ class WhatsAppClient {
     init() {
         try {       
             const client = new Client({
-                authStrategy: new LocalAuth(),
-                puppeteer: {
-                    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-                }
+                authStrategy: new LocalAuth()
             });
 
             client.on('qr', (qr) => {
@@ -51,6 +44,10 @@ class WhatsAppClient {
             });
 
             client.on('message', async msg => {
+                const contact = await msg.getContact();
+                const pushname = contact.pushname; 
+                console.log(pushname)
+            if (pushname === 'Gustavo Machado') { 
                 const chatId = msg.from;
                 const messageType = msg.type;
                 const threadId = await OpenAIModule.ensureThreadId(chatId)
@@ -178,7 +175,11 @@ class WhatsAppClient {
                             } 
                         }
                     }
-            });
+                } else {
+                return
+                 }
+            } 
+                );
 
             return client.initialize();
 
