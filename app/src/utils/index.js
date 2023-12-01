@@ -85,13 +85,15 @@ async function waitForRunCompletion(threadId, runId) {
                     const toolCall = runStatus.required_action.submit_tool_outputs.tool_calls[0];
                     const name = toolCall.function.name;
                     const arguments = JSON.parse(toolCall.function.arguments);
-                    console.log(arguments);
-
-                    if (name === "getPharmacy" || name === "get_pharmacy") { 
-                        // Check if the function to call is getPharmacy
-                        const responses = await getPharmacy(arguments.latitude, arguments.longitude);
+                console.log(arguments);
+                
+                    if (runStatus.status === "in_progress") { 
+                        console.log("Skipping in_progress")
+                      }
+                
+                    if (name === "getHealthPlace" || name === "getHealthPlace") { 
+                        const responses = await getHealthPlace(arguments.latitude, arguments.longitude, arguments.textAddress);
                         console.log(responses);
-
                         // Submit tool outputs only if the run is not in_progress
                         if (runStatus.status !== "in_progress") {
                             const run = await openai.beta.threads.runs.submitToolOutputs(
@@ -104,8 +106,8 @@ async function waitForRunCompletion(threadId, runId) {
                                     }]
                                 }
                             );
-                            console.log(run);
-                        } else {
+                          console.log(run)
+                      } else {
                             console.log("Run is still in progress, cannot submit tool outputs.");
                         }
                     }
@@ -128,7 +130,7 @@ async function waitForRunCompletion(threadId, runId) {
                 clearInterval(intervalId);
                 reject(error);
             }
-        }, 1500); // Check every second, adjust as needed
+        }, 1500); 
     });
 }
 
@@ -306,33 +308,109 @@ async function checkTotalMessagesCountDay() {
   return [totalMessagesCount, totalBotResponsesCount, totalMessages]
 }
 
+// async function getPharmacy(latitude, longitude) {
+//     const apiKey = process.env.GOOGLE_API_KEY; // Replace with your actual API key
+//     const radius = 1000; // in meters
+//     const pharmacyType = 'pharmacy';
+//     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${pharmacyType}&key=${apiKey}`;
 
-async function getPharmacy(latitude, longitude) {
-    const apiKey = process.env.GOOGLE_API_KEY; // Replace with your actual API key
-    const radius = 1000; // in meters
-    const pharmacyType = 'pharmacy';
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${pharmacyType}&key=${apiKey}`;
+//     try {
+//         const response = await fetch(url);
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         const data = await response.json();
 
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+//         if (data.status !== 'OK') {
+//             throw new Error(data.error_message || 'Error fetching data');
+//         }
+
+//         return data.results.map(place => ({
+//             name: place.name,
+//             vicinity: place.vicinity,
+//             open_now: place.opening_hours
+//         }));
+//     } catch (error) {
+//         console.error('Error fetching pharmacy data:', error);
+//         return null;
+//     }
+// }
+
+async function getHealthPlace(latitude, longitude, textAddress = null) {
+    const apiKey = process.env.GOOGLE_API_KEY;
+    let url;
+
+    if (textAddress) {
+        const encodedAddress = encodeURIComponent(textAddress);
+        textUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodedAddress}&key=${apiKey}`;
+        console.log(`TextUrl: ${textUrl}`)  
+        try {
+          console.log(textUrl)
+          const response = await fetch(textUrl);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+          
+          const data = await response.json();
+
+            if (data.status !== 'OK') {
+                throw new Error(data.error_message || 'Error fetching data');
+            }
+
+          const coordinates = data.results[0].geometry.location;
+
+          try {
+              url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coordinates.lat},${coordinates.lng}&radius=1000&type=pharmacy&key=${apiKey}`;
+              console.log(url)
+              const response = await fetch(url);
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              const data = await response.json();
+
+              if (data.status !== 'OK') {
+                  throw new Error(data.error_message || 'Error fetching data');
+              }
+
+              return data.results.map(place => ({
+                  name: place.name,
+                  vicinity: place.vicinity,
+                  open_now: place.opening_hours ? place.opening_hours.open_now : null
+              }));
+            
+            } catch (error) {
+                console.error('Error fetching pharmacy data:', error);
+                return null;
+            }
+      } catch (error) {
+          console.error('Error fetching pharmacy data:', error);
+          return null;
+      }
+    } else {
+        // Otherwise, perform a nearby search based on latitude and longitude
+      url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1000&type=pharmacy&key=${apiKey}`;
+      try {
+          console.log(url)
+          const response = await fetch(url);
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+
+          if (data.status !== 'OK') {
+              throw new Error(data.error_message || 'Error fetching data');
+          }
+
+          return data.results.map(place => ({
+              name: place.name,
+              vicinity: place.vicinity,
+              open_now: place.opening_hours ? place.opening_hours.open_now : null
+          }));
+        } catch (error) {
+            console.error('Error fetching pharmacy data:', error);
+            return null;
         }
-        const data = await response.json();
-
-        if (data.status !== 'OK') {
-            throw new Error(data.error_message || 'Error fetching data');
-        }
-
-        return data.results.map(place => ({
-            name: place.name,
-            vicinity: place.vicinity,
-            open_now: place.opening_hours
-        }));
-    } catch (error) {
-        console.error('Error fetching pharmacy data:', error);
-        return null;
-    }
+      }
 }
 
 module.exports = {
@@ -350,6 +428,6 @@ module.exports = {
     checkTotalUserCountDay,
     checkTotalMessagesCount,
     checkTotalMessagesCountDay,
-    getPharmacy
+    getHealthPlace,
 }
 
