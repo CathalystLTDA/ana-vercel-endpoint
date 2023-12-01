@@ -130,7 +130,7 @@ async function waitForRunCompletion(threadId, runId) {
                 clearInterval(intervalId);
                 reject(error);
             }
-        }, 1500); 
+        }, 2000); 
     });
 }
 
