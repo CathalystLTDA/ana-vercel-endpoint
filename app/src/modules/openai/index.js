@@ -4,7 +4,7 @@ const prisma = require('../../modules/database');
 
 require('dotenv').config();
 
-const openai = new OpenAI();
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 class OpenAIModule {
     constructor() {

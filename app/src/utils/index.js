@@ -6,7 +6,7 @@ const { OpenAI } = require('openai');
 
 require('dotenv').config();
 
-const openai = new OpenAI();
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 function runSleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -308,111 +308,6 @@ async function checkTotalMessagesCountDay() {
   return [totalMessagesCount, totalBotResponsesCount, totalMessages]
 }
 
-// async function getPharmacy(latitude, longitude) {
-//     const apiKey = process.env.GOOGLE_API_KEY; // Replace with your actual API key
-//     const radius = 1000; // in meters
-//     const pharmacyType = 'pharmacy';
-//     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${pharmacyType}&key=${apiKey}`;
-
-//     try {
-//         const response = await fetch(url);
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//         }
-//         const data = await response.json();
-
-//         if (data.status !== 'OK') {
-//             throw new Error(data.error_message || 'Error fetching data');
-//         }
-
-//         return data.results.map(place => ({
-//             name: place.name,
-//             vicinity: place.vicinity,
-//             open_now: place.opening_hours
-//         }));
-//     } catch (error) {
-//         console.error('Error fetching pharmacy data:', error);
-//         return null;
-//     }
-// }
-
-async function getHealthPlace(latitude, longitude, textAddress = null) {
-    const apiKey = process.env.GOOGLE_API_KEY;
-    let url;
-
-    if (textAddress) {
-        const encodedAddress = encodeURIComponent(textAddress);
-        textUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodedAddress}&key=${apiKey}`;
-        console.log(`TextUrl: ${textUrl}`)  
-        try {
-          console.log(textUrl)
-          const response = await fetch(textUrl);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-          
-          const data = await response.json();
-
-            if (data.status !== 'OK') {
-                throw new Error(data.error_message || 'Error fetching data');
-            }
-
-          const coordinates = data.results[0].geometry.location;
-
-          try {
-              url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coordinates.lat},${coordinates.lng}&radius=1000&type=pharmacy&key=${apiKey}`;
-              console.log(url)
-              const response = await fetch(url);
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              const data = await response.json();
-
-              if (data.status !== 'OK') {
-                  throw new Error(data.error_message || 'Error fetching data');
-              }
-
-              return data.results.map(place => ({
-                  name: place.name,
-                  vicinity: place.vicinity,
-                  open_now: place.opening_hours ? place.opening_hours.open_now : null
-              }));
-            
-            } catch (error) {
-                console.error('Error fetching pharmacy data:', error);
-                return null;
-            }
-      } catch (error) {
-          console.error('Error fetching pharmacy data:', error);
-          return null;
-      }
-    } else {
-        // Otherwise, perform a nearby search based on latitude and longitude
-      url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1000&type=pharmacy&key=${apiKey}`;
-      try {
-          console.log(url)
-          const response = await fetch(url);
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          const data = await response.json();
-
-          if (data.status !== 'OK') {
-              throw new Error(data.error_message || 'Error fetching data');
-          }
-
-          return data.results.map(place => ({
-              name: place.name,
-              vicinity: place.vicinity,
-              open_now: place.opening_hours ? place.opening_hours.open_now : null
-          }));
-        } catch (error) {
-            console.error('Error fetching pharmacy data:', error);
-            return null;
-        }
-      }
-}
-
 module.exports = {
     runSleep,
     convertAudioToMp3,
@@ -428,6 +323,5 @@ module.exports = {
     checkTotalUserCountDay,
     checkTotalMessagesCount,
     checkTotalMessagesCountDay,
-    getHealthPlace,
 }
 

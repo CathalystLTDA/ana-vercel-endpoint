@@ -47,10 +47,6 @@ class WhatsAppClient {
             });
 
             client.on('message', async msg => {
-                const contact = await msg.getContact();
-                const pushname = contact.pushname; 
-                console.log(pushname)
-            if (pushname === 'Gustavo Machado') { 
                 const chatId = msg.from;
                 const messageType = msg.type;
                 const threadId = await OpenAIModule.ensureThreadId(chatId)
@@ -178,12 +174,9 @@ class WhatsAppClient {
                             } 
                         }
                     }
-                } else {
-                return
-                 }
-            } 
-                );
-
+                } 
+            );
+            
             return client.initialize();
 
         } catch (error) {
