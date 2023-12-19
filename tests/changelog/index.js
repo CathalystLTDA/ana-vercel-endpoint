@@ -2,12 +2,7 @@ const { Client, LocalAuth, MessageMedia, Buttons } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const prisma = require('../../app/src/modules/database');
 
-const client = new Client({
-                authStrategy: new LocalAuth(),
-                puppeteer: {
-                    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-                }
-            });
+const client = new Client();
 
 async function main() {
     client.on('qr', qr => {
