@@ -11,6 +11,7 @@ const {
     findAddress,
     checkRunStatusAndWait,
     isValidMessageType,
+    generateMariaVoiceMessage
     } = require('../../utils');
 
 const OpenAIModule = require('../openai')
@@ -86,6 +87,7 @@ class WhatsAppClient {
                                 const audioBuffer = Buffer.from(audioMedia.data, 'base64');
                                 const audioPath = `./${chatId.slice(0,12)}-tempAudio.oga`; // OGG format file
                                 const convertedAudioPath = `./${chatId.slice(0,12)}-convertedAudio.mp3`; // Target MP3 format file
+                                const generatedMariaAudioMessage = `./${chatId.slice(0,12)}-generatedMariaAudio.mp3`; // Target MP3 format file
 
                                 fs.writeFileSync(audioPath, audioBuffer);
 
@@ -105,12 +107,18 @@ class WhatsAppClient {
 
                                     try {
                                         const assistantResponse = await OpenAIModule.getAssistantResponse(threadId, rundId, newAssistantMessage)
+                                        const audioMessage = await generateMariaVoiceMessage(generatedMariaAudioMessage, assistantResponse)
+
                                         msg.reply(assistantResponse);
+                                        if (audioMessage) {
+                                            msg.reply(MessageMedia.fromFilePath(generatedMariaAudioMessage))
+                                            fs.unlinkSync(generatedMariaAudioMessage);
+                                        }
 
                                         await saveBotResponse(userMessageId, chatId, assistantResponse, threadId, process.env.OPENAI_ASSISTANT_ID);
 
                                         userTimers[chatId] = setTimeout(() => {
-                                        msg.reply("Espero que eu tenha te ajudado! Se tiver um momento, adoraria receber seu feedback sobre a sua experiência comigo, é muito importante para que eu possa entender melhor como ajudar a todos! Você pode deixar seu feedback aqui: https://maria-sigma.vercel.app/feedback. Obrigado por usar a MARIA e esperamos conversar com você novamente!");
+                                            msg.reply("Espero que eu tenha te ajudado! Se tiver um momento, adoraria receber seu feedback sobre a sua experiência comigo, é muito importante para que eu possa entender melhor como ajudar a todos! Você pode deixar seu feedback aqui: https://maria-sigma.vercel.app/feedback. Obrigado por usar a MARIA e esperamos conversar com você novamente!");
                                         delete userTimers[chatId];
                                     }, 600000);
                                     } catch (error) {

@@ -70,6 +70,17 @@ async function checkRunStatusAndWait(threadId) {
   }
 }
 
+async function generateMariaVoiceMessage(speechFilePath, message) {
+  const generateUadioMessage = await openai.audio.speech.create({
+    model: "tts-1-hd",
+    voice: "nova",
+    input: message,
+  });
+  const buffer = Buffer.from(await generateUadioMessage.arrayBuffer());
+  await fs.promises.writeFile(speechFilePath, buffer)
+  return true
+}
+
 async function waitForRunCompletion(threadId, runId) {
     return new Promise((resolve, reject) => {
         const intervalId = setInterval(async () => {
@@ -223,8 +234,7 @@ async function findAddress(lat, lng) {
         if (data.error) {
             throw new Error('Não foi possível encontrar o endereço.');
         } else {
-          // Retorna o endereço formatado
-          const address = `Meu endereço atual é: ${data.address.road}, ${data.address?.house_number}, no bairro ${data.address.suburb} em ${data.address.city}, ${data.address.state}, CEP: ${data.address.postcode} ${data.address.country}`
+          const address = "Meu endereço atual é: " + data.address.road + ","+data.address?.house_number + " , no bairro " + data.address.suburb + " em " + data.address.city + " , " + data.address.state + " , CEP: " + data.address.postcode + " , em " + data.address.country
           return address
         }
     } catch (error) {
@@ -255,59 +265,6 @@ function isValidMessageType(messageType) {
   return acceptedMessageTypes.includes(messageType);
 }
 
-async function checkTotalUserCountDay() {
-  const now = new Date();
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-
-  const totalUserCount = await prisma.userState.count({
-    where: {
-      createdAt: {
-        gte: startOfDay,
-        lt: endOfDay,
-      },
-    },
-  });
-
-  return totalUserCount;
-}
-
-async function checkTotalMessagesCount() {
-  const totalUserMessages = await prisma.message.count()
-  const totalBotMessages = await prisma.botResponse.count()
-  const totalMessages = totalUserMessages + totalBotMessages
-  return [totalUserMessages, totalBotMessages, totalMessages]
-}
-
-async function checkTotalMessagesCountDay() {
-  const now = new Date();
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-
-  const totalMessagesCount = await prisma.message.count({
-    where: {
-      createdAt: {
-        gte: startOfDay,
-        lt: endOfDay,
-      },
-    },
-  });
-
-  const totalBotResponsesCount = await prisma.message.count({
-    where: {
-      createdAt: {
-        gte: startOfDay,
-        lt: endOfDay,
-      },
-    },
-  });
-
-  const totalMessages = totalUserMessages + totalBotMessages
-
-
-  return [totalMessagesCount, totalBotResponsesCount, totalMessages]
-}
-
 module.exports = {
     runSleep,
     convertAudioToMp3,
@@ -320,8 +277,6 @@ module.exports = {
     checkFirstMessage,
     isValidMessageType,
     checkTotalUserCount,
-    checkTotalUserCountDay,
-    checkTotalMessagesCount,
-    checkTotalMessagesCountDay,
+    generateMariaVoiceMessage
 }
 
