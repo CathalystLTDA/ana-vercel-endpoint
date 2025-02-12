@@ -8,51 +8,66 @@ datasource db {
 }
 
 model UserState {
-  chatId          String   @id
-  messageCount    Int      @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  rateLimit       Int      @default(0)
-  isOnCooldown    Boolean  @default(false) 
-  cooldownCount   Int      @default(0)
-  threadId        String?
-  acceptedTerms   Boolean @default(false)
-  messages        Message[]
-  botResponses    BotResponse[]
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String        @db.Uuid
+  chatId        String
+  messageCount  Int           @default(0)
+  createdAt     DateTime      @default(now()) @db.Timestamp(6)
+  updatedAt     DateTime      @default(now()) @updatedAt @db.Timestamp(6)
+  rateLimit     Int           @default(0)
+  isOnCooldown  Boolean       @default(false)
+  cooldownCount Int           @default(0)
+  threadId      String?
+  acceptedTerms Boolean       @default(false)
+  BotResponse   BotResponse[]
+  Message       Message[]
+  User          User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user")
+
+  @@unique([userId, chatId], map: "unique_user_chat")
 }
 
 model Message {
-  id              String     @id @default(uuid())
-  userState       UserState   @relation(fields: [chatId], references: [chatId], onDelete: Cascade)
-  chatId          String
-  content         String
-  messageType     String
-  receivedAt      DateTime   @default(now())
-  threadId        String 
-  botResponses    BotResponse[] 
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userStateId  String        @db.Uuid
+  content      String
+  messageType  String
+  receivedAt   DateTime      @default(now()) @db.Timestamp(6)
+  threadId     String
+  botResponses BotResponse[]
+  UserState    UserState     @relation(fields: [userStateId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_userstate")
 }
 
 model BotResponse {
-  id              String   @id @default(uuid())
-  respondingTo    Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
-  messageId       String
-  userState       UserState  @relation(fields: [chatId], references: [chatId], onDelete: Cascade)
-  chatId          String
-  assistantId     String
-  content         String
-  responseType    String
-  threadId        String
-  sentAt          DateTime @default(now())
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  messageId    String    @db.Uuid
+  userStateId  String    @db.Uuid
+  assistantId  String
+  content      String
+  responseType String
+  threadId     String
+  sentAt       DateTime  @default(now()) @db.Timestamp(6)
+  respondingTo Message   @relation(fields: [messageId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_message")
+  UserState    UserState @relation(fields: [userStateId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_userstate_response")
 }
 
 model Feedback {
-  feedbackId      String       @id
-  username        String?
-  phoneNumber     String?
-  userEmail       String?
-  content         String 
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime
-  reachRateLimit  Boolean?
-  wannaHelp       Boolean?
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String   @db.Uuid
+  content        String
+  createdAt      DateTime @default(now()) @db.Timestamp(6)
+  updatedAt      DateTime @default(now()) @db.Timestamp(6)
+  reachRateLimit Boolean?
+  wannaHelp      Boolean?
+  User           User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_feedback_user")
+}
+
+model User {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  phoneNumber String      @unique
+  name        String?
+  email       String?
+  createdAt   DateTime    @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime    @default(now()) @db.Timestamp(6)
+  Feedback    Feedback[]
+  UserState   UserState[]
 }
