@@ -7,10 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  phoneNumber String      @unique
+  name        String?
+  email       String?
+  createdAt   DateTime    @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime    @default(now()) @db.Timestamp(6)
+  feedbacks   Feedback[]
+  userStates  UserState[]
+}
+
 model UserState {
-  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId        String        @db.Uuid
-  chatId        String
+  chatId        String        @id
+  userId        String?       @db.Uuid
   messageCount  Int           @default(0)
   createdAt     DateTime      @default(now()) @db.Timestamp(6)
   updatedAt     DateTime      @default(now()) @updatedAt @db.Timestamp(6)
@@ -19,35 +29,33 @@ model UserState {
   cooldownCount Int           @default(0)
   threadId      String?
   acceptedTerms Boolean       @default(false)
-  BotResponse   BotResponse[]
-  Message       Message[]
-  User          User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user")
-
-  @@unique([userId, chatId], map: "unique_user_chat")
+  botResponses  BotResponse[]
+  messages      Message[]
+  user          User?         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Message {
   id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userStateId  String        @db.Uuid
+  userStateId  String
   content      String
   messageType  String
   receivedAt   DateTime      @default(now()) @db.Timestamp(6)
   threadId     String
   botResponses BotResponse[]
-  UserState    UserState     @relation(fields: [userStateId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_userstate")
+  userState    UserState     @relation(fields: [userStateId], references: [chatId], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model BotResponse {
   id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   messageId    String    @db.Uuid
-  userStateId  String    @db.Uuid
+  userStateId  String
   assistantId  String
   content      String
   responseType String
   threadId     String
   sentAt       DateTime  @default(now()) @db.Timestamp(6)
-  respondingTo Message   @relation(fields: [messageId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_message")
-  UserState    UserState @relation(fields: [userStateId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_userstate_response")
+  respondingTo Message   @relation(fields: [messageId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  userState    UserState @relation(fields: [userStateId], references: [chatId], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Feedback {
@@ -58,16 +66,5 @@ model Feedback {
   updatedAt      DateTime @default(now()) @db.Timestamp(6)
   reachRateLimit Boolean?
   wannaHelp      Boolean?
-  User           User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_feedback_user")
-}
-
-model User {
-  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  phoneNumber String      @unique
-  name        String?
-  email       String?
-  createdAt   DateTime    @default(now()) @db.Timestamp(6)
-  updatedAt   DateTime    @default(now()) @db.Timestamp(6)
-  Feedback    Feedback[]
-  UserState   UserState[]
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
